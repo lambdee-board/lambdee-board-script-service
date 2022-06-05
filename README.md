@@ -1,5 +1,18 @@
 # lambdee-board-console-server
 
+## Setup
+
+```sh
+$ bundle
+```
+
+## Run the example server and client
+
+```sh
+$ ruby server.rb
+$ open client.html
+```
+
 ## Problems
 
 ### eventmachine
