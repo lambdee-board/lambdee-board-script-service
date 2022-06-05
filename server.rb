@@ -70,8 +70,8 @@ module LambdeeConsole
   end
 end
 
-EM.run do
-  EM::WebSocket.run(host: '0.0.0.0', port: 8080, debug: false) do |ws|
+EventMachine.run do
+  EventMachine::WebSocket.run(host: '0.0.0.0', port: 8080, debug: false) do |ws|
     ws.onopen do |handshake|
       puts "WebSocket opened #{{
         path: handshake.path,
@@ -84,10 +84,9 @@ EM.run do
       session = LambdeeConsole::Session.new
 
       ws.onmessage do |msg|
-        puts msg
         output = session.evaluate msg
         puts output
-        ws.send output
+        ws.send output.gsub(/\e\[(\d*)m/, '') # remove terminal formatting
       end
 
       ws.onclose do
