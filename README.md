@@ -17,7 +17,7 @@ $ bundle
 ### Start the server
 
 ```sh
-$ iodine
+$ bin/server
 ```
 
 ### Open the client
