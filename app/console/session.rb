@@ -8,6 +8,8 @@ def __anonymous_binding__
     extend self
     anonymous_binding = binding
   end
+
+  anonymous_binding
 end
 
 module Console
