@@ -6,10 +6,16 @@
 $ bundle
 ```
 
-## Run the example server and client
+## Run
+
+### Start the server
 
 ```sh
-$ ruby server.rb
+$ iodine
+```
+
+### Open the client
+```sh
 $ open client.html
 ```
 

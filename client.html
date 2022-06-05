@@ -18,7 +18,7 @@
           appendText(element, string)
         }
 
-        var ws = new WebSocket("ws://localhost:8080/foo/bar?hello=world");
+        var ws = new WebSocket("ws://localhost:3000/");
         ws.onmessage = function(evt) {
           debug("Received: " + evt.data);
           consolePrint(evt.data)
