@@ -27,7 +27,6 @@ module Console
     # @return [String] IRB output
     def evaluate(string)
       @input_method.puts string
-      p @input_method.exps
       io = ::StringIO.new
       orig_stdout = $stdout
       $stdout = io
