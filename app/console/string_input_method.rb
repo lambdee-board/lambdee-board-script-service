@@ -4,15 +4,15 @@ require 'irb/xmp'
 
 module Console
   class StringInputMethod < XMP::StringInputMethod
-    def gets
-      while (l = @exps.shift)
-        next if /^\s+$/ =~ l
+    attr_reader :exps
 
-        l.concat "\n"
-        print @prompt
-        break
-      end
-      l
+    def gets
+      result = @exps.reject { /^\s*$/ =~ _1 }.join(';')
+      @exps.clear
+      return if result.empty?
+
+      print @prompt
+      result.concat("\n")
     end
   end
 end

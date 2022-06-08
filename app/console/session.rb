@@ -27,13 +27,14 @@ module Console
     # @return [String] IRB output
     def evaluate(string)
       @input_method.puts string
+      p @input_method.exps
       io = ::StringIO.new
       orig_stdout = $stdout
       $stdout = io
       @irb.eval_input # evaluate code
       $stdout = orig_stdout
 
-      io.string
+      io.string.lines.reject { |line| line.start_with?(LAMBDEE_PROMPT) }.join
     end
   end
 end

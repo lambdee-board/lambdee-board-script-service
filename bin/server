@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-
-iodine
+                # threads processes/workers
+iodine -p 3001 #-t 16 -w 4
