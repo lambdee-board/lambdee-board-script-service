@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'stringio'
+require 'timeout'
 
 def __anonymous_binding__
   anonymous_binding = nil
@@ -14,7 +15,12 @@ end
 
 module Console
   class Session
-    # attr_reader :input_method, :irb
+    # @return [Integer] Max amount of characters of the evaluated code's output
+    OUTPUT_MAX_CHARACTERS = 5_000
+    # @return [Integer] Max amount of lines of the evaluated code's output
+    OUTPUT_MAX_LINES = 200
+    # @return [Integer] Max amount of seconds code should be evaluated
+    EXECUTION_TIMEOUT = 20
 
     def initialize
       @input_method = StringInputMethod.new
@@ -30,10 +36,44 @@ module Console
       io = ::StringIO.new
       orig_stdout = $stdout
       $stdout = io
-      @irb.eval_input # evaluate code
+      timeout_error = nil
+      begin
+        ::Timeout.timeout(EXECUTION_TIMEOUT) do
+          @irb.eval_input # evaluate code
+        end
+      rescue ::Timeout::Error => e
+        timeout_error = e
+      end
       $stdout = orig_stdout
 
-      io.string.lines.reject { |line| line.start_with?(LAMBDEE_PROMPT) }.join
+      sanitize_output(io.string, timeout_error)
+    end
+
+    private
+
+    # @param output [String]
+    # @param error [StandardError, nil]
+    # @return [String]
+    def sanitize_output(output, error = nil)
+      sliced = false
+
+      if output.length > OUTPUT_MAX_CHARACTERS
+        output = output[...OUTPUT_MAX_CHARACTERS]
+        sliced = true
+      end
+
+      output = output.lines
+
+      if output.length > OUTPUT_MAX_LINES
+        output = output[...OUTPUT_MAX_LINES]
+        sliced = true
+      end
+
+      output << "\n"
+      output << "#{error.message} (#{error.class})\n" if error
+      output << "Output has been sliced because it was too long\n" if sliced
+      puts output
+      output.reject { |line| line.start_with?(LAMBDEE_PROMPT) }.join
     end
   end
 end
