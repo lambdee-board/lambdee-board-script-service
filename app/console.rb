@@ -43,4 +43,5 @@ IRB.conf[:PROMPT] = {
 }
 
 require_relative 'console/string_input_method'
+require_relative 'console/censor_refinement'
 require_relative 'console/session'

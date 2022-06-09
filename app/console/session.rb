@@ -3,24 +3,41 @@
 require 'stringio'
 require 'timeout'
 
+using ::Console::CensorRefinement
+
+# @return [Binding]
 def __anonymous_binding__
   anonymous_binding = nil
   Module.new do
     extend self
+
+    def fork; end
+
     anonymous_binding = binding
   end
 
   anonymous_binding
 end
 
+# Internal Ruby module used for printing warnings.
+# Ruby warnings like constant reassigning will now raise errors.
+module Warning
+  # @param message [String]
+  # @return [void]
+  def warn(message)
+    raise ::StandardError, message
+  end
+end
+
+
 module Console
   class Session
     # @return [Integer] Max amount of characters of the evaluated code's output
-    OUTPUT_MAX_CHARACTERS = 5_000
+    OUTPUT_MAX_CHARACTERS = 20_000
     # @return [Integer] Max amount of lines of the evaluated code's output
     OUTPUT_MAX_LINES = 200
     # @return [Integer] Max amount of seconds code should be evaluated
-    EXECUTION_TIMEOUT = 20
+    EXECUTION_TIMEOUT = 50
 
     def initialize
       @input_method = StringInputMethod.new

@@ -3,7 +3,7 @@
 require 'irb/xmp'
 
 module Console
-  class StringInputMethod < XMP::StringInputMethod
+  class StringInputMethod < ::XMP::StringInputMethod
     attr_reader :exps
 
     def gets
