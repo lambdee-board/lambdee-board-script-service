@@ -8,4 +8,6 @@ ruby ::File.read('.ruby-version').chomp.strip
 gem 'awesome_print'
 gem 'debug'
 gem 'iodine', '~> 0.7'
+gem 'refrigerator'
 gem 'sinatra'
+gem 'sorted_set'

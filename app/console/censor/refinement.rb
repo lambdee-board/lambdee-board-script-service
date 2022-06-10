@@ -17,7 +17,7 @@ module Console
     #     File.read('some_file') #=> :censored_method
     #
     module Refinement
-      # @return [Array<Module>] Modules/Classes that will be censored/blocked
+      # @return [Array<Module, Class>] Modules/Classes that will be censored/blocked
       CENSORED_MODULES = [
         ::Thread,
         ::Fiber,
@@ -31,6 +31,7 @@ module Console
         ::TracePoint,
       ].freeze
 
+      # @return [Array<Symbol>] Kernel methods that will be censored/blocked
       CENSORED_KERNEL_METHODS = %i[
         fork
         spawn
@@ -63,9 +64,14 @@ module Console
         `
       ].freeze
 
+      # @return [Array<CensoredMethods>]
       CENSORED_METHODS = [
         *CENSORED_MODULES.map { CensoredMethods.new(_1) },
-        CensoredMethods.new(::Kernel, instance: CENSORED_KERNEL_METHODS),
+        CensoredMethods.new(
+          ::Kernel,
+          instance: CENSORED_KERNEL_METHODS,
+          singleton: CENSORED_KERNEL_METHODS
+        ),
         CensoredMethods.new(
           ::Module,
           instance: %i[

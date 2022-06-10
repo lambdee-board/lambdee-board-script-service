@@ -1,5 +1,6 @@
 require 'irb'
 require 'awesome_print'
+require 'sorted_set'
 
 module Console; end
 
@@ -21,11 +22,12 @@ AwesomePrint.defaults = {
 }
 
 IRB.conf[:BACK_TRACE_LIMIT] = 0
-IRB.conf[:VERBOSE] = true
+IRB.conf[:VERBOSE] = false
 IRB.conf[:INSPECT_MODE] = true
+IRB.conf[:CONTEXT_MODE] = 1
 IRB.conf[:ECHO] = true
 IRB.conf[:LC_MESSAGES] = ::IRB::Locale.new
-IRB.conf[:SINGLE_IRB] = true
+IRB.conf[:SINGLE_IRB] = false
 IRB.conf[:USE_TRACER] = false
 IRB.conf[:USE_COLORIZE] = true
 IRB.conf[:USE_AUTOCOMPLETE] = false

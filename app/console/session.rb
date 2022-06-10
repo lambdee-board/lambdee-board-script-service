@@ -27,6 +27,7 @@ module Warning
   end
 end
 
+::Warning.freeze
 
 module Console
   class Session
@@ -35,7 +36,7 @@ module Console
     # @return [Integer] Max amount of lines of the evaluated code's output
     OUTPUT_MAX_LINES = 200
     # @return [Integer] Max amount of seconds code should be evaluated
-    EXECUTION_TIMEOUT = 50
+    EXECUTION_TIMEOUT = 5
 
     def initialize
       @input_method = StringInputMethod.new
@@ -88,7 +89,7 @@ module Console
       output << "#{error.message} (#{error.class})\n" if error
       output << "Output has been sliced because it was too long\n" if sliced
       puts output
-      output.reject { |line| line.start_with?(LAMBDEE_PROMPT) }.join
+      output.join
     end
   end
 end

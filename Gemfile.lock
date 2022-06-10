@@ -14,14 +14,20 @@ GEM
     rack (2.2.3.1)
     rack-protection (2.2.0)
       rack
+    rbtree (0.4.5)
+    refrigerator (1.4.1)
     reline (0.3.1)
       io-console (~> 0.5)
     ruby2_keywords (0.0.5)
+    set (1.0.2)
     sinatra (2.2.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
       rack-protection (= 2.2.0)
       tilt (~> 2.0)
+    sorted_set (1.0.3)
+      rbtree
+      set (~> 1.0)
     tilt (2.0.10)
 
 PLATFORMS
@@ -31,7 +37,9 @@ DEPENDENCIES
   awesome_print
   debug
   iodine (~> 0.7)
+  refrigerator
   sinatra
+  sorted_set
 
 RUBY VERSION
    ruby 3.1.2p20
