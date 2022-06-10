@@ -3,15 +3,13 @@
 require 'stringio'
 require 'timeout'
 
-using ::Console::CensorRefinement
+using ::Console::Censor::Refinement
 
 # @return [Binding]
 def __anonymous_binding__
   anonymous_binding = nil
   Module.new do
     extend self
-
-    def fork; end
 
     anonymous_binding = binding
   end
