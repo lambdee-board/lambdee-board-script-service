@@ -2,12 +2,15 @@ require 'irb'
 require 'awesome_print'
 require 'sorted_set'
 
+# Contains code which handles the web console.
+# It can execute arbitrary Ruby code while censoring
+# dangerous classes/modules.
 module Console; end
 
 AwesomePrint.irb!
 
 AwesomePrint.defaults = {
-  indent: 2,      # Number of spaces for indenting.
+  indent: 2, # Number of spaces for indenting.
   index: true, # Display array indices.
   html: false, # Use ANSI color codes rather than HTML.
   multiline: true, # Display in multiple lines.

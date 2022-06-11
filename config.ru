@@ -6,7 +6,7 @@ run ::App
 
 # freeze all modules and classes from stdlib
 require 'refrigerator'
-::Refrigerator.freeze_core(except: %w[Object])
+# ::Refrigerator.freeze_core(except: %w[Object])
 
 # freeze all constants
 
@@ -27,4 +27,4 @@ def freeze_all_constants(mod = ::Object)
   end
 end
 
-freeze_all_constants unless ::ENV['NO_FREEZE']
+# freeze_all_constants unless ::ENV['NO_FREEZE']

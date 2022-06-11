@@ -3,6 +3,8 @@
 require 'irb/xmp'
 
 module Console
+  # Custom input method for IRB which
+  # enables it to consume `String` input.
   class StringInputMethod < ::XMP::StringInputMethod
     attr_reader :exps
 

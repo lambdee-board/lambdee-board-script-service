@@ -4,18 +4,17 @@ require 'json'
 
 module WebSocket
   class Controller
-    def initialize
-      @session = ::Console::Session.new
-    end
-
     # This will get hit after this Controller gets attached to a request
     #
     # @param connection [Iodine::Connection]
     def on_open(connection)
+      @code_runner = ::CodeRunner.new
+      connection.close if @code_runner.closed?
+
       connection.write Message.encode(
         type: :console_output,
         payload: {
-          output: <<~TXT,
+          output: <<~TXT
             Connected to the Lambdee Console
             Ruby: #{::RUBY_VERSION}
           TXT
@@ -30,11 +29,13 @@ module WebSocket
       message = Message.decode(data)
       case message.type
       when :console_input
-        output = @session.evaluate message.dig('payload', 'input')
+        @code_runner.connection.write({ type: :input,
+                                        payload: message.dig('payload', 'input') })
+
         connection.write Message.encode(
           type: :console_output,
           payload: {
-            output: output.chomp.strip
+            output: @code_runner.connection.read[:payload].chomp.strip
           }
         )
       end
@@ -43,13 +44,13 @@ module WebSocket
     # This will get hit when the the connection.write buffer becomes empty
     #
     # @param connection [Iodine::Connection]
-    def on_drained(connection)
-    end
+    def on_drained(connection); end
 
     # This will get hit when the websocket connection gets closed from the server
     #
     # @param connection [Iodine::Connection]
     def on_shutdown(connection)
+      @code_runner&.close
       connection.write Message.encode(
         type: :console_output,
         payload: {
@@ -62,6 +63,7 @@ module WebSocket
     #
     # @param connection [Iodine::Connection]
     def on_close(connection)
+      @code_runner&.close
       connection.write Message.encode(
         type: :console_output,
         payload: {

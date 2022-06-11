@@ -30,6 +30,8 @@ end
 ::Warning.freeze
 
 module Console
+  # Creates an IRB session and provides methods
+  # for executing Ruby code in it.
   class Session
     # @return [Integer] Max amount of characters of the evaluated code's output
     OUTPUT_MAX_CHARACTERS = 20_000
@@ -88,7 +90,7 @@ module Console
       output << "\n"
       output << "#{error.message} (#{error.class})\n" if error
       output << "Output has been sliced because it was too long\n" if sliced
-      puts output
+      ::LOGGER.debug output
       output.join
     end
   end
