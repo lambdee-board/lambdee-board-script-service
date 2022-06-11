@@ -26,10 +26,10 @@ module UnixSocket
     HEADER_BYTES = 4
 
     class << self
-      # @param header [String]
-      # @return [Integer]
+      # @param header [String, nil]
+      # @return [Integer, nil]
       def decode_header(header)
-        header.unpack1(HEADER_FORMAT)
+        header&.unpack1(HEADER_FORMAT)
       end
 
       # @param body [String] MessagePack encoded body

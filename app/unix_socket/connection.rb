@@ -30,6 +30,8 @@ module UnixSocket
       ::LOGGER.debug "sent header #{message.bytesize}"
       @socket.print(message.body)
       ::LOGGER.debug "sent body #{payload}"
+    rescue ::Errno::EPIPE => e
+      raise Error, e.message
     end
 
     alias write send
@@ -39,9 +41,13 @@ module UnixSocket
       ::LOGGER.debug 'waiting for a header'
       body_size = Message.decode_header(@socket.read(Message::HEADER_BYTES))
       ::LOGGER.debug "received header #{body_size}"
+      raise Error, 'Header is nil!' if body_size.nil?
+
       body = Message.decode_body(@socket.read(body_size))
       ::LOGGER.debug "received body #{body}"
       body
+    rescue ::Errno::EPIPE => e
+      raise Error, e.message
     end
 
     def close

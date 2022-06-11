@@ -35,10 +35,13 @@ module WebSocket
         connection.write Message.encode(
           type: :console_output,
           payload: {
-            output: @code_runner.connection.read[:payload].chomp.strip
+            output: @code_runner.connection.read&.[](:payload)&.chomp&.strip || ''
           }
         )
       end
+    rescue ::UnixSocket::Connection::Error
+      @code_runner.close
+      connection.close
     end
 
     # This will get hit when the the connection.write buffer becomes empty
