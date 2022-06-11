@@ -4,6 +4,7 @@
     "byteslice",
     "klass",
     "Lambdee",
+    "msgpack",
     "Ractor",
     "stringio"
   ]
