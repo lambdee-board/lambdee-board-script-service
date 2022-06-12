@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 module Console
   module Censor
     # Censors modules/classes by overriding all of their methods
@@ -29,6 +31,7 @@ module Console
         ::Binding,
         ::ThreadGroup,
         ::TracePoint,
+        ::Logger,
       ].freeze
 
       # @return [Array<Symbol>] Kernel methods that will be censored/blocked
@@ -130,6 +133,8 @@ module Console
       CENSORED_METHODS.each do |censored_methods_object|
         censor_module(censored_methods_object)
       end
+
+      freeze
     end
   end
 end

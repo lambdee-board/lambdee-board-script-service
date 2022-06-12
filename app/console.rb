@@ -8,10 +8,22 @@ require 'sorted_set'
 # It can execute arbitrary Ruby code while censoring
 # dangerous classes/modules, forbidding constant reassignment
 # and freezing important constants (stdlib modules/classes).
-module Console; end
+module Console
+  # @return [String]
+  RETURN_PROMPT = '  => '
+end
 
 # Configure a replacement for the default `inspect` used in IRB.
-AwesomePrint.irb!
+::IRB::Irb.class_eval do
+  def output_value(*)
+    puts "#{::Console::RETURN_PROMPT}#{@context.last_value.ai}"
+  rescue NoMethodError
+    puts("#{::Console::RETURN_PROMPT}#{@context.last_value.inspect}") || return if @context.last_value.respond_to?(:inspect)
+
+    "#{::Console::RETURN_PROMPT}(Object doesn't support #ai)"
+  end
+end
+
 AwesomePrint.defaults = {
   indent: 2, # Number of spaces for indenting.
   index: true, # Display array indices.
@@ -31,7 +43,7 @@ AwesomePrint.defaults = {
 IRB.conf[:BACK_TRACE_LIMIT] = 0
 IRB.conf[:VERBOSE] = false
 IRB.conf[:INSPECT_MODE] = true
-IRB.conf[:CONTEXT_MODE] = 1
+# IRB.conf[:CONTEXT_MODE] = 1
 IRB.conf[:ECHO] = true
 IRB.conf[:LC_MESSAGES] = ::IRB::Locale.new
 IRB.conf[:SINGLE_IRB] = false

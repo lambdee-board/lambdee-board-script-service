@@ -6,7 +6,7 @@ require 'logger'
 require_relative 'utils'
 require_relative 'unix_socket'
 require_relative 'web_socket'
-require_relative 'code_runner'
+require_relative 'repl_worker'
 
 ::LOGGER = ::Logger.new($stdout)
 ::LOGGER.level = ::Logger::DEBUG

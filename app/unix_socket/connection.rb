@@ -5,6 +5,7 @@ module UnixSocket
   # standard API for communicating through it.
   class Connection
     class Error < ::StandardError; end
+    class WouldBlockError < Error; end
 
     class << self
       # @param path [String]
@@ -21,6 +22,9 @@ module UnixSocket
     def initialize(socket)
       @socket = socket
     end
+
+    # @return [Socket]
+    attr_reader :socket
 
     # @param payload [Hash{Symbol => Object}]
     # @return [void]
@@ -48,6 +52,22 @@ module UnixSocket
       body
     rescue ::Errno::EPIPE => e
       raise Error, e.message
+    end
+
+    # @return [Hash{Symbol => Object}] Payload of the message.
+    def read_nonblock
+      ::LOGGER.debug 'waiting for a header'
+      body_size = Message.decode_header(@socket.recv_nonblock(Message::HEADER_BYTES))
+      ::LOGGER.debug "received header #{body_size}"
+      raise Error, 'Header is nil!' if body_size.nil?
+
+      body = Message.decode_body(@socket.read(body_size))
+      ::LOGGER.debug "received body #{body}"
+      body
+    rescue ::Errno::EPIPE => e
+      raise Error, e.message
+    rescue ::IO::EAGAINWaitReadable => e
+      raise WouldBlockError, e.message
     end
 
     def close

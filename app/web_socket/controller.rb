@@ -1,18 +1,16 @@
 # frozen_string_literal: true
 
-require 'json'
-
 module WebSocket
   class Controller
     # This will get hit after this Controller gets attached to a request
     #
     # @param connection [Iodine::Connection]
     def on_open(connection)
-      @code_runner = ::CodeRunner.new
-      connection.close if @code_runner.closed?
+      @repl_worker = ::ReplWorker.new
+      connection.close if @repl_worker.closed?
 
       connection.write Message.encode(
-        type: :console_output,
+        type: :console_output_end,
         payload: {
           output: <<~TXT
             Connected to the Lambdee Console
@@ -25,22 +23,54 @@ module WebSocket
     # This will get hit when the client sends a message via the websocket
     #
     # @param connection [Iodine::Connection]
+    # def on_message(connection, data)
+    #   message = Message.decode(data)
+    #   case message.type
+    #   when :console_input
+    #     @repl_worker.connection.write({ type: :input,
+    #                                     payload: message.dig('payload', 'input') })
+
+    #     connection.write Message.encode(
+    #       type: :console_output,
+    #       payload: {
+    #         output: @repl_worker.connection.read&.[](:payload) || ''
+    #       }
+    #     )
+    #   end
+    # rescue ::UnixSocket::Connection::Error
+    #   @repl_worker.close
+    #   connection.close
+    # end
+
+    # This will get hit when the client sends a message via the websocket
+    #
+    # @param connection [Iodine::Connection]
     def on_message(connection, data)
       message = Message.decode(data)
       case message.type
       when :console_input
-        @code_runner.connection.write({ type: :input,
+        @repl_worker.connection.write({ type: :input,
                                         payload: message.dig('payload', 'input') })
 
+        loop do
+          repl_response = @repl_worker.connection.read
+          break if repl_response.nil?
+          break if repl_response[:type] == :output_end
+
+          connection.write Message.encode(
+            type: :console_output,
+            payload: {
+              output: repl_response[:payload] || ''
+            }
+          )
+        end
+
         connection.write Message.encode(
-          type: :console_output,
-          payload: {
-            output: @code_runner.connection.read&.[](:payload)&.chomp&.strip || ''
-          }
+          type: :console_output_end
         )
       end
     rescue ::UnixSocket::Connection::Error
-      @code_runner.close
+      @repl_worker.close
       connection.close
     end
 
@@ -53,7 +83,7 @@ module WebSocket
     #
     # @param connection [Iodine::Connection]
     def on_shutdown(connection)
-      @code_runner&.close
+      @repl_worker&.close
       connection.write Message.encode(
         type: :console_output,
         payload: {
@@ -66,7 +96,7 @@ module WebSocket
     #
     # @param connection [Iodine::Connection]
     def on_close(connection)
-      @code_runner&.close
+      @repl_worker&.close
       connection.write Message.encode(
         type: :console_output,
         payload: {

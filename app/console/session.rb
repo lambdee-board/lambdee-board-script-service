@@ -33,14 +33,6 @@ module Console
   # Creates an IRB session and provides methods
   # for executing Ruby code in it.
   class Session
-    # Max amount of characters of the evaluated code's output
-    #
-    # @return [Integer]
-    OUTPUT_MAX_CHARACTERS = 20_000
-    # Max amount of lines of the evaluated code's output
-    #
-    # @return [Integer]
-    OUTPUT_MAX_LINES = 200
     # Max amount of seconds code should be evaluated
     #
     # @return [Integer]
@@ -54,50 +46,19 @@ module Console
     end
 
     # @param string [String] Ruby code
-    # @return [String] IRB output
-    def evaluate(string)
+    # @return [void]
+    def evaluate(string, stdout)
       @input_method.puts string
-      io = ::StringIO.new
       orig_stdout = $stdout
-      $stdout = io
-      timeout_error = nil
+      $stdout = stdout
       begin
         ::Timeout.timeout(EXECUTION_TIMEOUT) do
           @irb.eval_input # evaluate code
         end
       rescue ::Timeout::Error => e
-        timeout_error = e
+        puts "#{e.message} (#{e.class})\n"
       end
       $stdout = orig_stdout
-
-      sanitize_output(io.string, timeout_error)
-    end
-
-    private
-
-    # @param output [String]
-    # @param error [StandardError, nil]
-    # @return [String]
-    def sanitize_output(output, error = nil)
-      sliced = false
-
-      if output.length > OUTPUT_MAX_CHARACTERS
-        output = output[...OUTPUT_MAX_CHARACTERS]
-        sliced = true
-      end
-
-      output = output.lines
-
-      if output.length > OUTPUT_MAX_LINES
-        output = output[...OUTPUT_MAX_LINES]
-        sliced = true
-      end
-
-      output << "\n"
-      output << "#{error.message} (#{error.class})\n" if error
-      output << "Output has been sliced because it was too long\n" if sliced
-      ::LOGGER.debug output
-      output.join
     end
   end
 end

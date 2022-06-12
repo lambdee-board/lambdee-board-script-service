@@ -4,12 +4,12 @@
 # between processes via UNIX Sockets
 module UnixSocket
   class << self
-    # Path to the Socket file of a particular code runner.
+    # Path to the Socket file of a particular REPL worker.
     #
-    # @param pid [Integer] Process ID of the code runner.
+    # @param pid [Integer] Process ID of the REPL worker.
     # @return [String]
-    def code_runner_path(pid)
-      "/tmp/lambdee-code-runner-#{pid}.sock"
+    def repl_worker_path(pid)
+      "/tmp/lambdee-repl-worker-#{pid}.sock"
     end
   end
 end
