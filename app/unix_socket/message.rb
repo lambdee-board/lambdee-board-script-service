@@ -2,6 +2,9 @@
 
 require 'msgpack'
 
+# Add a separate type for Symbol serialisation, so that
+# decoding an encoded message containing Symbols, will
+# result in Symbols and not Strings.
 ::MessagePack::DefaultFactory.register_type(0x00, ::Symbol)
 
 module UnixSocket

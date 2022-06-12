@@ -33,11 +33,17 @@ module Console
   # Creates an IRB session and provides methods
   # for executing Ruby code in it.
   class Session
-    # @return [Integer] Max amount of characters of the evaluated code's output
+    # Max amount of characters of the evaluated code's output
+    #
+    # @return [Integer]
     OUTPUT_MAX_CHARACTERS = 20_000
-    # @return [Integer] Max amount of lines of the evaluated code's output
+    # Max amount of lines of the evaluated code's output
+    #
+    # @return [Integer]
     OUTPUT_MAX_LINES = 200
-    # @return [Integer] Max amount of seconds code should be evaluated
+    # Max amount of seconds code should be evaluated
+    #
+    # @return [Integer]
     EXECUTION_TIMEOUT = 5
 
     def initialize
