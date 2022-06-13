@@ -11,36 +11,12 @@ module WebSocket
 
       connection.write Message.encode(
         type: :console_output_end,
-        payload: {
-          output: <<~TXT
-            Connected to the Lambdee Console
-            Ruby: #{::RUBY_VERSION}
-          TXT
-        }
+        payload: <<~TXT
+          Connected to the Lambdee Console
+          Ruby: #{::RUBY_VERSION}
+        TXT
       )
     end
-
-    # This will get hit when the client sends a message via the websocket
-    #
-    # @param connection [Iodine::Connection]
-    # def on_message(connection, data)
-    #   message = Message.decode(data)
-    #   case message.type
-    #   when :console_input
-    #     @repl_worker.connection.write({ type: :input,
-    #                                     payload: message.dig('payload', 'input') })
-
-    #     connection.write Message.encode(
-    #       type: :console_output,
-    #       payload: {
-    #         output: @repl_worker.connection.read&.[](:payload) || ''
-    #       }
-    #     )
-    #   end
-    # rescue ::UnixSocket::Connection::Error
-    #   @repl_worker.close
-    #   connection.close
-    # end
 
     # This will get hit when the client sends a message via the websocket
     #
@@ -59,9 +35,7 @@ module WebSocket
 
           connection.write Message.encode(
             type: :console_output,
-            payload: {
-              output: repl_response[:payload] || ''
-            }
+            payload: repl_response[:payload] || ''
           )
         end
 
@@ -86,9 +60,7 @@ module WebSocket
       @repl_worker&.close
       connection.write Message.encode(
         type: :console_output,
-        payload: {
-          output: 'Closing the session'
-        }
+        payload: 'Closing the session'
       )
     end
 
@@ -99,9 +71,7 @@ module WebSocket
       @repl_worker&.close
       connection.write Message.encode(
         type: :console_output,
-        payload: {
-          output: 'Closing the session'
-        }
+        payload: 'Closing the session'
       )
     end
   end
