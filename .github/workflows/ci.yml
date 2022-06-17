@@ -17,7 +17,7 @@ jobs:
         with:
           bundler-cache: true
       - name: Backend unit tests
-        run: bin/rake test
+        run: bundle exec rake test
 
   lint:
     runs-on: ubuntu-latest
