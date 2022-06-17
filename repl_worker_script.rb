@@ -18,6 +18,8 @@ require_relative 'app/constant_freezer'
 ::Utils.format_logger(::LOGGER)
 
 at_exit { ::LOGGER.info 'dying' }
+
+# Catch the Interrupt signal and gracefully exit
 ::Signal.trap('INT') do
   exit
 end

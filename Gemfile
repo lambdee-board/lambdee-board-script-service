@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby ::File.read('.ruby-version').chomp.strip
+ruby '3.1.2'
 
 gem 'awesome_print'
 gem 'iodine', '~> 0.7'
