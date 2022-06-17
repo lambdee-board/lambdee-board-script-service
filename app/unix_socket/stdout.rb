@@ -1,7 +1,12 @@
+# frozen_string_literal: true
+
 require 'stringio'
 
 module UnixSocket
-  class Stdout < StringIO
+  # Acts as a stdout which saves everything to an
+  # internal `String` and sends everything through
+  # a UNIX Socket.
+  class Stdout < ::StringIO
     # @param connection [Connection]
     def initialize(connection)
       @connection = connection

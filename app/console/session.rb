@@ -5,6 +5,8 @@ require 'timeout'
 
 using ::Console::Censor::Refinement
 
+# rubocop:disable Style/TopLevelMethodDefinition
+
 # @return [Binding]
 def __anonymous_binding__
   anonymous_binding = nil
@@ -17,17 +19,7 @@ def __anonymous_binding__
   anonymous_binding
 end
 
-# Internal Ruby module used for printing warnings.
-# Ruby warnings like constant reassigning will now raise errors.
-module Warning
-  # @param message [String]
-  # @return [void]
-  def warn(message)
-    raise ::StandardError, message
-  end
-end
-
-::Warning.freeze
+# rubocop:enable Style/TopLevelMethodDefinition
 
 module Console
   # Creates an IRB session and provides methods
@@ -38,6 +30,7 @@ module Console
     # @return [Integer]
     EXECUTION_TIMEOUT = 5
 
+    # Create a new IRB session
     def initialize
       @input_method = StringInputMethod.new
 

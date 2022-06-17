@@ -70,6 +70,9 @@ module UnixSocket
       raise WouldBlockError, e.message
     end
 
+    # Close the socket.
+    #
+    # @return [void]
     def close
       @socket.close
     end

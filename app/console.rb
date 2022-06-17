@@ -15,16 +15,17 @@ end
 
 # Configure a replacement for the default `inspect` used in IRB.
 ::IRB::Irb.class_eval do
+  # override how IRB prints returned values
   def output_value(*)
     puts "#{::Console::RETURN_PROMPT}#{@context.last_value.ai}"
   rescue NoMethodError
     puts("#{::Console::RETURN_PROMPT}#{@context.last_value.inspect}") || return if @context.last_value.respond_to?(:inspect)
 
-    "#{::Console::RETURN_PROMPT}(Object doesn't support #ai)"
+    puts "#{::Console::RETURN_PROMPT}(Object doesn't support #ai)"
   end
 end
 
-AwesomePrint.defaults = {
+::AwesomePrint.defaults = {
   indent: 2, # Number of spaces for indenting.
   index: true, # Display array indices.
   html: false, # Use ANSI color codes rather than HTML.

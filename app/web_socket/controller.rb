@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require_relative '../repl_worker'
+
 module WebSocket
+  # Controls websocket connections with the browser.
   class Controller
     # This will get hit after this Controller gets attached to a request
     #
@@ -11,11 +14,10 @@ module WebSocket
 
       connection.write Message.encode(
         type: :console_output_end,
-        payload: <<~TXT
+        payload: <<~TXT)
           Connected to the Lambdee Console
           Ruby: #{::RUBY_VERSION}
         TXT
-      )
     end
 
     # This will get hit when the client sends a message via the websocket

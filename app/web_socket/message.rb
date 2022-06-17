@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require 'json'
+
 module WebSocket
+  # Provides standard ways of encoding and decoding
+  # WebSocket messages.
   class Message
     class << self
       # @return [String] JSON encoded message
@@ -29,6 +33,7 @@ module WebSocket
     # @return [Hash, nil]
     attr_reader :payload
 
+    # Functions like `Hash#dig`
     def dig(*args)
       return if args.empty?
 
@@ -37,7 +42,7 @@ module WebSocket
       value = public_send(key)
       return if value.nil?
       return value if args.size.zero?
-      raise TypeError, "#{value.class} does not have #dig method" unless value.respond_to?(:dig)
+      raise ::TypeError, "#{value.class} does not have #dig method" unless value.respond_to?(:dig)
 
       value.dig(*args)
     end

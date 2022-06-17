@@ -1,11 +1,16 @@
 {
   "cSpell.words": [
+    "autorun",
     "bytesize",
     "byteslice",
+    "Cyclomatic",
+    "ESRCH",
     "klass",
     "Lambdee",
+    "metaprogramming",
     "msgpack",
     "Ractor",
-    "stringio"
+    "stringio",
+    "testtask"
   ]
 }

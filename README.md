@@ -25,6 +25,12 @@ $ bundle
 $ bin/dev
 ```
 
+## Run tests
+
+```shs
+$ bin/test
+```
+
 ## Architecture
 
 ### Lambdee Web Console

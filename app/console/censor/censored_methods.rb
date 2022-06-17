@@ -6,12 +6,6 @@ module Console
     # the names of their methods that should be censored
     # when running scripts.
     class CensoredMethods
-      class << self
-        def [](...)
-          new(...)
-        end
-      end
-
       # @return [Module, Class]
       attr_reader :mod
       # @return [Array<Symbol>] censored instance methods

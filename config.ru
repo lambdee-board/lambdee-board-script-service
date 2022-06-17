@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
-require './app/app'
+require 'logger'
+require 'debug'
 
-run ::App
+require_relative './app/utils'
+
+::LOGGER = ::Logger.new($stdout)
+::LOGGER.level = ::Logger::DEBUG
+::Utils.format_logger(::LOGGER)
+
+require './app/controllers'
+
+run ::Controllers::App

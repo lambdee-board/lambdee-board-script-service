@@ -2,6 +2,18 @@
 
 require 'logger'
 
+# Internal Ruby module used for printing warnings.
+# Ruby warnings like constant reassigning will now raise errors.
+module Warning
+  # @param message [String]
+  # @return [void]
+  def warn(message)
+    raise ::StandardError, message
+  end
+end
+
+::Warning.freeze
+
 module Console
   module Censor
     # Censors modules/classes by overriding all of their methods
@@ -21,6 +33,7 @@ module Console
     module Refinement
       # @return [Array<Module, Class>] Modules/Classes that will be censored/blocked
       CENSORED_MODULES = [
+        self,
         ::Thread,
         ::Fiber,
         ::File,
@@ -31,7 +44,7 @@ module Console
         ::Binding,
         ::ThreadGroup,
         ::TracePoint,
-        ::Logger,
+        ::Logger
       ].freeze
 
       # @return [Array<Symbol>] Kernel methods that will be censored/blocked
@@ -86,10 +99,12 @@ module Console
             remove_class_variable
             remove_const
           ]
-        ),
+        )
       ].freeze
 
       class << self
+        # rubocop:disable Security/Eval
+
         # @param censored_methods [CensoredMethods]
         # @param type [Symbol]
         # @return [Module]
@@ -102,16 +117,19 @@ module Console
             # Hence, classical metaprogramming doesn't work.
             #
             # Interestingly enough, evaluating a string
-            # creates same methods as regular ones defined in code.
+            # creates the same methods as regular ones defined in code.
+
             current_binding = binding
             censored_methods.public_send(type).each do |m|
-              eval <<~RUBY, current_binding
+              eval <<~RUBY, current_binding, __FILE__, __LINE__ + 1
                 def #{m}(*, **, &)
                   :censored_method
                 end
               RUBY
             end
           end
+
+          # rubocop:enable Security/Eval
         end
 
         # @param censored_methods [CensoredMethods]

@@ -24,9 +24,8 @@ module ConstantFreezer
       mod.constants.each do |constant|
         value = mod.const_get(constant)
         # puts "#{mod} - #{value}"
-        unless ::Set[::IO, ::Binding].include?(value.class) || LEFT_MODULES.include?(value)
-          value.freeze
-        end
+
+        value.freeze unless ::Set[::IO, ::Binding].include?(value.class) || LEFT_MODULES.include?(value)
         freeze_all_constants(value) if value.is_a?(::Module) && mod != value
       end
     end
