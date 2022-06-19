@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'debug'
-
 require 'socket'
 require 'logger'
 require 'digest'
@@ -13,7 +11,12 @@ require_relative '../../constant_freezer'
 
 # @return [Logger]
 ::LOGGER = ::Logger.new($stdout)
-::LOGGER.level = ::Logger::DEBUG
+::LOGGER.level = if %w[production test].include? ENV['RACK_ENV']
+                   ::Logger::INFO
+                 else
+                   ::Logger::DEBUG
+                 end
+
 ::Utils.format_logger(::LOGGER)
 
 at_exit { ::LOGGER.info 'dying' }

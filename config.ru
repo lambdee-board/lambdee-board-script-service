@@ -6,7 +6,11 @@ require 'debug'
 require_relative './app/utils'
 
 ::LOGGER = ::Logger.new($stdout)
-::LOGGER.level = ::Logger::DEBUG
+::LOGGER.level = if %w[production test].include? ENV['RACK_ENV']
+                   ::Logger::INFO
+                 else
+                   ::Logger::DEBUG
+                 end
 ::Utils.format_logger(::LOGGER)
 
 require './app/controllers'
