@@ -2,16 +2,16 @@
 
 require 'timeout'
 
-require_relative 'unix_socket'
+require_relative '../unix_socket'
 
 # Represents a single REPL worker -- a separate process
 # which can securely execute Ruby code and which retains its state
 # throughout calls.
 #
 # Communication with this process is based on UNIX Sockets.
-class ReplWorker
+class Workers::REPL
   # @return [String]
-  START_SCRIPT_PATH = 'repl_worker_script.rb'
+  START_SCRIPT_PATH = 'app/workers/repl/script.rb'
   # Max time in seconds of how long the class should try to
   # connect to the worker process through a UNIX Socket.
   #

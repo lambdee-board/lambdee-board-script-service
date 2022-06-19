@@ -6,11 +6,10 @@ require 'socket'
 require 'logger'
 require 'digest'
 
-require_relative 'app/unix_socket'
-require_relative 'app/unix_socket/stdout'
-require_relative 'app/console'
-require_relative 'app/utils'
-require_relative 'app/constant_freezer'
+require_relative '../../unix_socket'
+require_relative '../../console'
+require_relative '../../utils'
+require_relative '../../constant_freezer'
 
 # @return [Logger]
 ::LOGGER = ::Logger.new($stdout)
@@ -34,12 +33,14 @@ end
   connection = ::UnixSocket::Connection.new(socket)
   socket_out = ::UnixSocket::Stdout.new(connection)
   ::LOGGER.info 'unix socket server started'
+
   loop do
     message = connection.read
-    next unless message[:type] == :input
+    next if message.nil?
+    next unless message.type == :input
 
-    ::CONSOLE_SESSION.evaluate message[:payload], socket_out
-    connection.write({ type: :output_end })
+    ::CONSOLE_SESSION.evaluate message.payload, socket_out
+    connection.write(type: :output_end)
   end
 ensure
   connection&.close

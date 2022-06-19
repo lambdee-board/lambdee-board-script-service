@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../repl_worker'
+require_relative '../workers'
 
 module WebSocket
   # Controls websocket connections with the browser.
@@ -9,7 +9,7 @@ module WebSocket
     #
     # @param connection [Iodine::Connection]
     def on_open(connection)
-      @repl_worker = ::ReplWorker.new
+      @repl_worker = ::Workers::REPL.new
       connection.close if @repl_worker.closed?
 
       connection.write Message.encode(
@@ -27,17 +27,17 @@ module WebSocket
       message = Message.decode(data)
       case message.type
       when :console_input
-        @repl_worker.connection.write({ type: :input,
-                                        payload: message.dig('payload', 'input') })
+        @repl_worker.connection.write(type: :input,
+                                      payload: message.dig(:payload, :input))
 
         loop do
           repl_response = @repl_worker.connection.read
           break if repl_response.nil?
-          break if repl_response[:type] == :output_end
+          break if repl_response.type == :output_end
 
           connection.write Message.encode(
             type: :console_output,
-            payload: repl_response[:payload] || ''
+            payload: repl_response.payload || ''
           )
         end
 

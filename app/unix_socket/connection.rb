@@ -26,43 +26,47 @@ module UnixSocket
     # @return [Socket]
     attr_reader :socket
 
-    # @param payload [Hash{Symbol => Object}]
+    # @param :type [Symbol, String]
+    # @param :payload [Hash, Array, String, Symbol, Integer, nil]
     # @return [void]
-    def send(payload)
-      message = Message.new(payload)
+    def send(type:, payload: nil)
+      message = Message.new(type:, payload:)
       @socket.print(message.header)
       ::LOGGER.debug "sent header #{message.bytesize}"
+
       @socket.print(message.body)
-      ::LOGGER.debug "sent body #{payload}"
+      ::LOGGER.debug "sent body #{message.inspect}"
     rescue ::Errno::EPIPE => e
       raise Error, e.message
     end
 
     alias write send
 
-    # @return [Hash{Symbol => Object}] Payload of the message.
+    # @return [UnixSocket::Message] Payload of the message.
     def read
       ::LOGGER.debug 'waiting for a header'
       body_size = Message.decode_header(@socket.read(Message::HEADER_BYTES))
-      ::LOGGER.debug "received header #{body_size}"
+      ::LOGGER.debug "received header #{body_size.inspect}"
       raise Error, 'Header is nil!' if body_size.nil?
 
       body = Message.decode_body(@socket.read(body_size))
-      ::LOGGER.debug "received body #{body}"
+      ::LOGGER.debug "received body #{body.inspect}"
+
       body
     rescue ::Errno::EPIPE => e
       raise Error, e.message
     end
 
-    # @return [Hash{Symbol => Object}] Payload of the message.
+    # @return [UnixSocket::Message] Payload of the message.
     def read_nonblock
       ::LOGGER.debug 'waiting for a header'
       body_size = Message.decode_header(@socket.recv_nonblock(Message::HEADER_BYTES))
-      ::LOGGER.debug "received header #{body_size}"
+      ::LOGGER.debug "received header #{body_size.inspect}"
       raise Error, 'Header is nil!' if body_size.nil?
 
       body = Message.decode_body(@socket.read(body_size))
-      ::LOGGER.debug "received body #{body}"
+      ::LOGGER.debug "received body #{body.inspect}"
+
       body
     rescue ::Errno::EPIPE => e
       raise Error, e.message

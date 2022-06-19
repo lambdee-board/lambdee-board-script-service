@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-require 'msgpack'
-
-# Add a separate type for Symbol serialisation, so that
-# decoding an encoded message containing Symbols, will
-# result in Symbols and not Strings.
-::MessagePack::DefaultFactory.register_type(0x00, ::Symbol)
+require_relative '../json/message'
 
 module UnixSocket
   # Provides methods for encoding and decoding
@@ -14,10 +9,7 @@ module UnixSocket
   # Every message is preceded by a header of 4 bytes encoded in the
   # 32-bit unsigned Integer, network (big-endian) byte order.
   # This header signifies the length of the upcoming message body.
-  #
-  # The body itself is encoded in the MessagePack format (similar to JSON but low-level).
-  # This means that it's possible to serialize almost any Ruby Object.
-  class Message
+  class Message < ::JSON::Message
     # @return [Integer] Max length of the payload in bytes
     MAX_LENGTH = 1_048_576
     # Format string passed to `String#unpack1` and `Array#pack`
@@ -35,16 +27,7 @@ module UnixSocket
         header&.unpack1(HEADER_FORMAT)
       end
 
-      # @param body [String] MessagePack encoded body
-      # @return [Hash{Symbol => Object}]
-      def decode_body(body)
-        ::MessagePack.unpack(body)
-      end
-    end
-
-    # @param payload [Hash{Symbol => Object}]
-    def initialize(payload)
-      @payload = payload
+      alias decode_body decode
     end
 
     # @return [String] Encoded size of the message body in bytes.
@@ -57,9 +40,9 @@ module UnixSocket
       body.bytesize
     end
 
-    # @return [String] MessagePack encoded payload of the message.
+    # @return [String] encoded payload of the message.
     def body
-      @body ||= ::MessagePack.pack(@payload)
+      @body ||= encode
     end
   end
 end

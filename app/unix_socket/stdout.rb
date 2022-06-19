@@ -18,8 +18,8 @@ module UnixSocket
     def write(*args)
       string = args.join
 
-      @connection.write({ type: :output,
-                          payload: string })
+      @connection.write(type: :output,
+                        payload: string)
 
       string.bytesize
     end

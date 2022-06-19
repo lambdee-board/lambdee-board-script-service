@@ -16,3 +16,4 @@ end
 
 require_relative 'unix_socket/message'
 require_relative 'unix_socket/connection'
+require_relative 'unix_socket/stdout'
