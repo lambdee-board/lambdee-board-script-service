@@ -24,7 +24,6 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     minitest (5.16.0)
-    msgpack (1.5.2)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nokogiri (1.13.6-aarch64-linux)
@@ -108,7 +107,6 @@ DEPENDENCIES
   debug
   iodine (~> 0.7)
   minitest
-  msgpack
   rack-test
   rake
   refrigerator
