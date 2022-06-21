@@ -28,6 +28,7 @@ class Workers::REPL
     @closed = false
     @pid = spawn(::RbConfig.ruby, START_SCRIPT_PATH)
     ::Process.detach(@pid)
+    ::LOGGER.info "spawned repl-worker #{@pid}"
     socket_path = ::UnixSocket.repl_worker_path(@pid)
 
     ::Timeout.timeout(SOCKET_CONNECTION_TIMEOUT) do
@@ -60,7 +61,7 @@ class Workers::REPL
     rescue ::Errno::ESRCH # No such process
     end
     @connection&.close
-    ::LOGGER.info "killing worker #{@pid}"
+    ::LOGGER.info "killing repl-worker #{@pid}"
     @closed = true
   end
   # rubocop:enable Lint/SuppressedException

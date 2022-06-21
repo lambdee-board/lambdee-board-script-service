@@ -53,12 +53,15 @@ sequenceDiagram
     loop
         Frontend->>Script Service: user code to execute
         Script Service->>REPL Worker: execute user code
-        REPL Worker->>Script Service: output of user code
-        Script Service->>Frontend: output of user code
+        loop
+            REPL Worker->>Script Service: output of user code
+            Script Service->>Frontend: output of user code
+        end
     end
     Frontend->>Script Service: close the WebSocket connection
     Script Service->>REPL Worker: close the UNIX Socket connection
     Script Service->>REPL Worker: kill the worker process
+
 </div> -->
 
 ![Web Console Sequence Diagram](./assets/readme/web_console_sequence_diagram.png)

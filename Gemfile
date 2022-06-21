@@ -7,7 +7,6 @@ ruby '3.1.2'
 
 gem 'awesome_print'
 gem 'iodine', '~> 0.7'
-gem 'msgpack'
 gem 'refrigerator'
 gem 'sinatra'
 gem 'sorted_set'
