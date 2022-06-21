@@ -12,5 +12,25 @@
     "Ractor",
     "stringio",
     "testtask"
-  ]
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#c87659",
+    "activityBar.activeBorder": "#9fdfb0",
+    "activityBar.background": "#c87659",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#9fdfb0",
+    "activityBarBadge.foreground": "#15202b",
+    "sash.hoverBorder": "#c87659",
+    "statusBar.background": "#b35a3b",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#c87659",
+    "statusBarItem.remoteBackground": "#b35a3b",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#b35a3b",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#b35a3b99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#b35a3b"
 }
