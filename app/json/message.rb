@@ -25,8 +25,8 @@ module JSON
       end
     end
 
-    # @param :type [Symbol, String]
-    # @param :payload [Hash, Array, String, Symbol, Integer, nil]
+    # @param type [Symbol, String]
+    # @param payload [Hash, Array, String, Symbol, Integer, nil]
     def initialize(type:, payload: nil)
       @type = type.to_sym
       @payload = payload

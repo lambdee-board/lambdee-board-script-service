@@ -14,8 +14,8 @@ module Console
       attr_reader :singleton
 
       # @param mod [Module, Class]
-      # @param :instance [Array<Symbol>, S]
-      # @param :singleton [Array<Symbol>]
+      # @param instance [Array<Symbol>]
+      # @param singleton [Array<Symbol>]
       def initialize(mod, instance: [], singleton: [])
         if instance.empty? && singleton.empty?
           instance = mod.instance_methods(false)

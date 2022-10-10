@@ -7,7 +7,7 @@ module UnixSocket
   # internal `String` and sends everything through
   # a UNIX Socket.
   class Stdout < ::StringIO
-    # @param connection [Connection]
+    # @param connection [UnixSocket::Connection]
     def initialize(connection)
       @connection = connection
       super()

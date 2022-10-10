@@ -110,15 +110,6 @@ module Console
         # @return [Module]
         def censored_methods_module(censored_methods, type:)
           ::Module.new do
-            # SIC!
-            # This seems stupid, I know. I'm evaluating a dynamic string
-            # rather than using `define_method`, because **Refinements**
-            # can only import methods defined with Ruby code.
-            # Hence, classical metaprogramming doesn't work.
-            #
-            # Interestingly enough, evaluating a string
-            # creates the same methods as regular ones defined in code.
-
             current_binding = binding
             censored_methods.public_send(type).each do |m|
               eval <<~RUBY, current_binding, __FILE__, __LINE__ + 1

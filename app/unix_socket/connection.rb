@@ -26,8 +26,8 @@ module UnixSocket
     # @return [Socket]
     attr_reader :socket
 
-    # @param :type [Symbol, String]
-    # @param :payload [Hash, Array, String, Symbol, Integer, nil]
+    # @param type [Symbol, String]
+    # @param payload [Hash, Array, String, Symbol, Integer, nil]
     # @return [void]
     def send(type:, payload: nil)
       message = Message.new(type:, payload:)

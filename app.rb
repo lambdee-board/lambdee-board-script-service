@@ -5,3 +5,4 @@
 require_relative 'app/controllers'
 require_relative 'app/constant_freezer'
 require_relative 'app/console'
+require_relative 'app/query_api'
