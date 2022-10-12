@@ -1,19 +1,24 @@
 # rubocop:disable Style/OptionalBooleanParameter
 # frozen_string_literal: true
 
+require_relative 'where_methods'
+
 module DB
   module QueryAPI
     # Object which represents a database query.
     class Query
       include WhereMethods
 
+      # @return [Class]
+      attr_reader :target_class
       # @return [Hash]
       attr_reader :body
 
-      # @param table_name [String, Symbol]
-      def initialize(table_name)
+      # @param target_class [Class]
+      def initialize(target_class)
+        @target_class = target_class
         @body = {
-          type: table_name,
+          type: @target_class.table_name,
           query: {}
         }
       end

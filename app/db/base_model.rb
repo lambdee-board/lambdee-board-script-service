@@ -2,6 +2,8 @@
 
 require 'shale'
 
+require_relative 'query_api'
+
 module DB
   # @abstract Subclass to define a new Database Model class
   #   which represents an SQL table
@@ -14,7 +16,7 @@ module DB
 
       # @return [String]
       def table_name
-        @table_name ||= "#{name.downcase}s"
+        @table_name ||= "#{name.split('::').last.downcase}s"
       end
     end
 

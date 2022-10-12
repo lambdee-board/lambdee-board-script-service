@@ -7,12 +7,23 @@ module DB
   # A comment has an author (a User who created it)
   # and a Task to which it is attached.
   class Comment < BaseModel
+    # @!attribute [rw] author_id
+    #   @return [Integer] ID of the associated author.
+    # @!attribute [rw] author
+    #   @return [User]
+    belongs_to :author, 'User'
+    # @!attribute [rw] task_id
+    #   @return [Integer] ID of the associated task.
+    # @!attribute [rw] task
+    #   @return [Task]
+    belongs_to :task, 'Task'
+
     # @!attribute [rw] body
-    #   @return [String] Body of the comment
+    #   @return [String, nil] Body of the comment
     #     formatted in Markdown.
     attribute :body, ::Shale::Type::String
     # @!attribute [rw] deleted_at
-    #   @return [Time] When the board was deleted.
+    #   @return [Time, nil] When the board was deleted.
     attribute :deleted_at, ::Shale::Type::Time
 
     # @return [Boolean]

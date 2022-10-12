@@ -8,6 +8,33 @@ module DB
   # it may have one or more assigned users,
   # and comments.
   class Task < BaseModel
+    # @!attribute [rw] author_id
+    #   @return [Integer] ID of the associated author.
+    # @!attribute [rw] author
+    #   @return [User]
+    belongs_to :author, 'User'
+    # @!attribute [rw] list_id
+    #   @return [Integer] ID of the associated list.
+    # @!attribute [rw] list
+    #   @return [List]
+    belongs_to :list, 'List'
+
+    # @!attribute [r] comments
+    #   @return [QueryAPI::Query]
+    has_many :comments, 'Comment'
+    # @!attribute [r] task_users
+    #   @return [QueryAPI::Query]
+    has_many :task_users, 'TaskUser'
+    # @!attribute [r] task_tags
+    #   @return [QueryAPI::Query]
+    has_many :task_tags, 'TaskTag'
+    # @!attribute [r] users
+    #   @return [QueryAPI::Query]
+    has_many :users, 'User', through: :task_users
+    # @!attribute [r] tags
+    #   @return [QueryAPI::Query]
+    has_many :tags, 'Tag', through: :task_tags
+
     # @!attribute [rw] name
     #   @return [String] Name of the task.
     attribute :name, ::Shale::Type::String

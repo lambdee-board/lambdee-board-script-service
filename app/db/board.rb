@@ -6,14 +6,27 @@ module DB
   #
   # A Board contains Lists of Tasks.
   class Board < BaseModel
+    # @!attribute [rw] workspace_id
+    #   @return [Integer] ID of the associated workspace.
+    # @!attribute [rw] workspace
+    #   @return [Workspace]
+    belongs_to :workspace, 'Workspace'
+
+    # @!attribute [r] lists
+    #   @return [QueryAPI::Query]
+    has_many :lists, 'List'
+    # @!attribute [r] tags
+    #   @return [QueryAPI::Query]
+    has_many :tags, 'Tag'
+
     # @!attribute [rw] name
     #   @return [String] Name of the workspace.
     attribute :name, ::Shale::Type::String
     # @!attribute [rw] colour
-    #   @return [String] HEX colour of the board.
+    #   @return [String, nil] HEX colour of the board.
     attribute :colour, ::Shale::Type::String
     # @!attribute [rw] deleted_at
-    #   @return [Time] When the board was deleted.
+    #   @return [Time, nil] When the board was deleted.
     attribute :deleted_at, ::Shale::Type::Time
 
     # @return [Boolean]

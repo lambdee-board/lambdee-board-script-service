@@ -6,7 +6,7 @@ module DB
     # of the `WHERE` clause in the database query.
     #
     # Requires `#where_query` and `#where_query=` to be defined.
-    class WhereMethods
+    module WhereMethods
       # @param kwargs [Hash]
       # @return [self]
       def where(**kwargs)
