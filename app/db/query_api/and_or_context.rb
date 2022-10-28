@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'where_methods'
+
 module DB
   module QueryAPI
     # Context object used to evaluate blocks passed to
@@ -14,8 +16,6 @@ module DB
       def initialize
         @body = {}
       end
-
-      private
 
       def where_query=(value)
         @body = value
