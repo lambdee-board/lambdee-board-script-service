@@ -37,7 +37,7 @@ module DB
         raise ServerFailure, response if response.status >= 500
 
         body = ::JSON.parse response.body
-        return body['aggregate'] if body['aggregate']
+        return body['aggregation'] if body['aggregation']
 
         model = BaseModel.model_table_name_map[body['type'].to_sym]
         body['records'].map do |record|
