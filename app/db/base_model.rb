@@ -10,13 +10,26 @@ module DB
   class BaseModel < ::Shale::Mapper
     extend QueryAPI::Associations
     extend QueryAPI::Searching
+    extend QueryAPI::Persistence::ClassMethods
+    include QueryAPI::Persistence::InstanceMethods
+
+    # @return [Hash{Symbol => self}]
+    @@model_table_name_map = {} # rubocop:disable Style/ClassVars
 
     class << self
-      attr_writer :table_name
+      # @return [Symbol]
+      attr_accessor :table_name
 
-      # @return [String]
-      def table_name
-        @table_name ||= "#{name.split('::').last.downcase}s"
+      # @param subclass [Class<self>]
+      def inherited(subclass)
+        super
+        subclass.table_name = "#{subclass.name.split('::').last.downcase}s".to_sym
+        @@model_table_name_map[subclass.table_name] = subclass
+      end
+
+      # @return [Hash{Symbol => self}]
+      def model_table_name_map
+        @@model_table_name_map
       end
     end
 

@@ -1,7 +1,11 @@
 # rubocop:disable Style/OptionalBooleanParameter
 # frozen_string_literal: true
 
+require 'faraday'
+require 'json'
+
 require_relative 'where_methods'
+require_relative '../../../config/env_settings'
 
 module DB
   module QueryAPI
@@ -22,6 +26,26 @@ module DB
           query: {}
         }
       end
+
+      # @return [Array<DB::BaseModel>, Object]
+      def execute
+        response = ::LambdeeAPI.http_connection.get('search') do |req|
+          req.body = @body.to_json
+        end
+
+        raise InvalidQueryError, response if (300...500).include? response.status
+        raise ServerFailure, response if response.status >= 500
+
+        body = ::JSON.parse response.body
+        return body['aggregate'] if body['aggregate']
+
+        model = BaseModel.model_table_name_map[body['type'].to_sym]
+        body['records'].map do |record|
+          model.from_record(record)
+        end
+      end
+
+      alias load execute
 
       # @param elements [Integer]
       # @return [self]
@@ -85,12 +109,15 @@ module DB
 
       # @return [Boolean]
       def exist?
-        limit(1).execute.any?
+        limit(1).load.any?
+      end
+
+      # @return [Array]
+      def to_a
+        execute.to_a
       end
 
       alias exists? exist?
-
-      private
 
       def where_query=(value)
         @body[:query][:where] = value
@@ -99,6 +126,8 @@ module DB
       def where_query
         @body[:query][:where]
       end
+
+      private
 
       # @param key [Symbol]
       # @param val [Object]

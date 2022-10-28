@@ -11,21 +11,23 @@ gem 'refrigerator' # for freezing built-in classes/modules
 gem 'shale' # object mapper and serializer for JSON and other formats
 gem 'sinatra' # HTTP server framework
 gem 'sorted_set' # adds a Set subclass which sorts its contents
+gem 'faraday' # HTTP client
 
 group :development do
-  gem 'solargraph' # language server for IDEs
-  gem 'yard' # automatic code documentation from comments
+  gem 'solargraph', require: false # language server for IDEs
+  gem 'yard', require: false # automatic code documentation from comments
 end
 
 group :development, :test do
-  gem 'brakeman' # vulnerabilities checker
-  gem 'bundler-audit' # dependency analyser
+  gem 'brakeman', require: false # vulnerabilities checker
+  gem 'bundler-audit', require: false # dependency analyser
   gem 'debug' # debugger
-  gem 'rake' # automation tasks
-  gem 'rubocop' # linter
+  gem 'rake', require: false # automation tasks
+  gem 'rubocop', require: false # linter
 end
 
 group :test do
   gem 'minitest' # test framework
   gem 'rack-test' # utilities for testing Rack (primitive HTTP server library)
+  gem 'shoulda-context', '~> 2.0' # adds `should` and `scenario` syntax in tests
 end

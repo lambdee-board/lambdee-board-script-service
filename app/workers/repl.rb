@@ -11,7 +11,7 @@ require_relative '../unix_socket'
 # Communication with this process is based on UNIX Sockets.
 class Workers::REPL
   # @return [String]
-  START_SCRIPT_PATH = 'app/workers/repl/script.rb'
+  START_SCRIPT_PATH = ::File.expand_path('repl/script.rb', __dir__)
   # Max time in seconds of how long the class should try to
   # connect to the worker process through a UNIX Socket.
   #
@@ -57,7 +57,7 @@ class Workers::REPL
   # @return [void]
   def close
     begin
-      Process.kill('INT', @pid)
+      ::Process.kill('INT', @pid)
     rescue ::Errno::ESRCH # No such process
     end
     @connection&.close

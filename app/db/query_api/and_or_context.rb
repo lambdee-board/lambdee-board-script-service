@@ -17,8 +17,6 @@ module DB
         @body = {}
       end
 
-      private
-
       def where_query=(value)
         @body = value
       end

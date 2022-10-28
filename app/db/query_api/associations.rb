@@ -11,7 +11,7 @@ module DB
       # @param foreign_key [Symbol, nil] Name of the foreign key field.
       # @return [void]
       def has_many(name, klass, foreign_key: nil, through: nil)
-        foreign_key ||= "#{table_name.delete_suffix('s')}_id"
+        foreign_key ||= "#{table_name.to_s.delete_suffix('s')}_id"
         return has_many_through(name, klass, through:, foreign_key:) if through
 
         relation_methods_module.class_eval <<-RUBY, __FILE__, __LINE__ + 1
@@ -26,7 +26,7 @@ module DB
       # @param foreign_key [Symbol, nil] Name of the foreign key field.
       # @return [void]
       def has_one(name, klass, foreign_key: nil)
-        foreign_key ||= "#{table_name.delete_suffix('s')}_id"
+        foreign_key ||= "#{table_name.to_s.delete_suffix('s')}_id"
         relation_methods_module.class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def #{name}
             @#{name} ||= #{klass}.find_by(#{foreign_key}: id)

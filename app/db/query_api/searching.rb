@@ -5,6 +5,10 @@ module DB
     # Provides methods which search for
     # records with specified attributes/fields.
     module Searching
+      def all
+        Query.new(self)
+      end
+
       def where(...)
         Query.new(self).where(...)
       end
@@ -64,15 +68,17 @@ module DB
       end
 
       # @param elements [Integer]
-      # @return [self, nil]
+      # @return [Array<self>, self, nil]
       def first(elements = 1)
-        Query.new(self).limit(elements).order(id: :asc).execute.first
+        result = Query.new(self).limit(elements).order(id: :asc).execute
+        elements == 1 ? result.first : result
       end
 
       # @param elements [Integer]
-      # @return [self, nil]
+      # @return [Array<self>, self, nil]
       def last(elements = 1)
-        Query.new(self).limit(elements).order(id: :desc).execute.first
+        result = Query.new(self).limit(elements).order(id: :desc).execute
+        elements == 1 ? result.first : result
       end
     end
   end

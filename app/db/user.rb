@@ -29,12 +29,16 @@ module DB
     # @!attribute [rw] email
     #   @return [String] Email of the user.
     attribute :email, ::Shale::Type::String
+    # @!attribute [rw] password
+    #   @return [String, nil] Password of the user.
+    attribute :password, ::Shale::Type::String
     # @!attribute [rw] role
     #   @return [String] Role of the user.
     attribute :role, ::Shale::Type::String
     # @!attribute [rw] deleted_at
     #   @return [Time] When the user was deleted.
     attribute :deleted_at, ::Shale::Type::Time
+    # TODO: nil values should be in `to_json`!
 
     # @return [Boolean]
     def deleted?

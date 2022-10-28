@@ -7,6 +7,7 @@ require 'digest'
 require_relative '../../unix_socket'
 require_relative '../../console'
 require_relative '../../utils'
+require_relative '../../db'
 require_relative '../../constant_freezer'
 
 # @return [Logger]

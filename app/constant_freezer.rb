@@ -4,7 +4,7 @@ require 'refrigerator'
 
 # Freezes almost all constants in this Ruby process.
 module ConstantFreezer
-  LEFT_MODULES = ::Set[::ENV, ::Digest, ::Object, ::Gem]
+  LEFT_MODULES = ::Set[::ENV, ::Digest, ::Object, ::Gem, ::Faraday]
 
   class << self
     # @return [void]

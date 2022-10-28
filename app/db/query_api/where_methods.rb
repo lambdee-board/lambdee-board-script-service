@@ -11,6 +11,8 @@ module DB
       # @return [self]
       def where(**kwargs)
         self.where_query ||= {}
+        return WhereProxy.new(self) if kwargs.empty?
+
         where_query.merge! and: kwargs
 
         self
