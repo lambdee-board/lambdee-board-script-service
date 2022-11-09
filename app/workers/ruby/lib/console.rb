@@ -11,6 +11,7 @@ require 'sorted_set'
 module Console
   # @return [String]
   RETURN_PROMPT = '  => '
+  LAMBDEE_PROMPT = '<<<LMBD_PROMPT>>> '
 end
 
 # Configure a replacement for the default `inspect` used in IRB.
@@ -53,17 +54,15 @@ IRB.conf[:USE_COLORIZE] = true
 IRB.conf[:USE_AUTOCOMPLETE] = false
 IRB.conf[:PROMPT_MODE] = :lambdee
 IRB.conf[:IRB_NAME] = 'lambdee'
-LAMBDEE_PROMPT = '<<<LMBD_PROMPT>>> '
 IRB.conf[:PROMPT] = {
   lambdee: {
-    PROMPT_I: LAMBDEE_PROMPT,
-    PROMPT_N: LAMBDEE_PROMPT,
-    PROMPT_S: LAMBDEE_PROMPT,
-    PROMPT_C: LAMBDEE_PROMPT,
+    PROMPT_I: ::Console::LAMBDEE_PROMPT,
+    PROMPT_N: ::Console::LAMBDEE_PROMPT,
+    PROMPT_S: ::Console::LAMBDEE_PROMPT,
+    PROMPT_C: ::Console::LAMBDEE_PROMPT,
     RETURN: "=> %s\n"
   }
 }
 
 require_relative 'console/string_input_method'
-require_relative 'console/censor'
 require_relative 'console/session'

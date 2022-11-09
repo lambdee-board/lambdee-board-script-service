@@ -11,7 +11,7 @@ module UnixSocket
   # This header signifies the length of the upcoming message body.
   class Message < ::JSON::Message
     # @return [Integer] Max length of the payload in bytes
-    MAX_LENGTH = 1_048_576
+    MAX_LENGTH = 1_048_576 # 1MB
     # Format string passed to `String#unpack1` and `Array#pack`
     # for decoding and encoding the header respectively.
     #

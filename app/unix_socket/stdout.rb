@@ -14,7 +14,7 @@ module UnixSocket
     end
 
     # @param args [Array<String>]
-    # @return
+    # @return [Integer]
     def write(*args)
       string = args.join
 

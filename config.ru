@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'logger'
-require 'debug'
 
 require_relative './app/utils'
 

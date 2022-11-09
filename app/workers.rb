@@ -4,4 +4,4 @@
 # separate worker processes.
 module Workers; end
 
-require_relative 'workers/repl'
+require_relative 'workers/ruby'

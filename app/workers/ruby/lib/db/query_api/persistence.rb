@@ -3,8 +3,6 @@
 require 'faraday'
 require 'json'
 
-require_relative '../../../config/env_settings'
-
 module DB
   module QueryAPI
     # Provides methods for saving, updating and deleting records.

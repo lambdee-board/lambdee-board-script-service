@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'uri'
+
 module Config
   # @return [String]
   LAMBDEE_HOST = ::ENV['LAMBDEE_HOST'] || 'localhost:3000'

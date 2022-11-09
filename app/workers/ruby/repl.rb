@@ -2,14 +2,14 @@
 
 require 'timeout'
 
-require_relative '../unix_socket'
+require_relative '../../unix_socket'
 
 # Represents a single REPL worker -- a separate process
 # which can securely execute Ruby code and which retains its state
 # throughout calls.
 #
 # Communication with this process is based on UNIX Sockets.
-class Workers::REPL
+class Workers::Ruby::REPL
   # @return [String]
   START_SCRIPT_PATH = ::File.expand_path('repl/script.rb', __dir__)
   # Max time in seconds of how long the class should try to
@@ -28,7 +28,7 @@ class Workers::REPL
     @closed = false
     @pid = spawn(::RbConfig.ruby, START_SCRIPT_PATH)
     ::Process.detach(@pid)
-    ::LOGGER.info "spawned repl-worker #{@pid}"
+    ::LOGGER.info "spawned Ruby repl-worker #{@pid}"
     socket_path = ::UnixSocket.repl_worker_path(@pid)
 
     ::Timeout.timeout(SOCKET_CONNECTION_TIMEOUT) do
@@ -61,7 +61,7 @@ class Workers::REPL
     rescue ::Errno::ESRCH # No such process
     end
     @connection&.close
-    ::LOGGER.info "killing repl-worker #{@pid}"
+    ::LOGGER.info "killing Ruby repl-worker #{@pid}"
     @closed = true
   end
   # rubocop:enable Lint/SuppressedException

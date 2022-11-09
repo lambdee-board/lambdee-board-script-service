@@ -177,3 +177,6 @@ AllCops:
     - 'Guardfile'
     - 'spec/**/*'
     - 'test/**/*'
+
+Layout/HeredocArgumentClosingParenthesis:
+  Enabled: false

@@ -2,13 +2,16 @@
 
 require 'socket'
 require 'logger'
-require 'digest'
+require 'debug' unless %w[production test].include? ENV['RACK_ENV']
 
-require_relative '../../unix_socket'
-require_relative '../../console'
-require_relative '../../utils'
-require_relative '../../db'
-require_relative '../../constant_freezer'
+# from the shared library with the Sinatra app
+require_relative '../../../utils'
+require_relative '../../../unix_socket'
+
+# from the library for scripts
+require_relative '../lib/db'
+require_relative '../lib/console'
+require_relative '../lib/constant_freezer'
 
 # @return [Logger]
 ::LOGGER = ::Logger.new($stdout)

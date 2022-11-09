@@ -9,15 +9,16 @@ module WebSocket
     #
     # @param connection [Iodine::Connection]
     def on_open(connection)
-      @repl_worker = ::Workers::REPL.new
+      @repl_worker = ::Workers::Ruby::REPL.new
       connection.close if @repl_worker.closed?
 
       connection.write Message.encode(
         type: :console_output_end,
-        payload: <<~TXT)
+        payload: <<~TXT
           Connected to the Lambdee Console
           Ruby: #{::RUBY_VERSION}
         TXT
+      )
     end
 
     # This will get hit when the client sends a message via the websocket

@@ -3,14 +3,16 @@
 require 'stringio'
 require 'timeout'
 
-using ::Console::Censor::Refinement
+require_relative '../censor'
+
+using ::Censor::Refinement
 
 # rubocop:disable Style/TopLevelMethodDefinition
 
 # @return [Binding]
 def __anonymous_binding__
   anonymous_binding = nil
-  Module.new do
+  ::Module.new do
     extend self
 
     anonymous_binding = binding

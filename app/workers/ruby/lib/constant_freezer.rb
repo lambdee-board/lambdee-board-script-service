@@ -21,7 +21,7 @@ module ConstantFreezer
       return if mod.frozen?
       return if LEFT_MODULES.include?(mod) && mod != ::Object
 
-      mod.constants.each do |constant|
+      mod.constants(false).each do |constant|
         value = mod.const_get(constant)
         # puts "#{mod} - #{value}"
 

@@ -11,7 +11,9 @@ module Console
 
     # @return [String]
     def gets
-      result = @exps.grep_v(/^\s*$/).join(';')
+      return if @exps.nil? || @exps.empty?
+
+      result = @exps.join("\n")
       @exps.clear
       return if result.empty?
 

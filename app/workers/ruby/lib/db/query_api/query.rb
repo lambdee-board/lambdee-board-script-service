@@ -5,7 +5,6 @@ require 'faraday'
 require 'json'
 
 require_relative 'where_methods'
-require_relative '../../../config/env_settings'
 
 module DB
   module QueryAPI

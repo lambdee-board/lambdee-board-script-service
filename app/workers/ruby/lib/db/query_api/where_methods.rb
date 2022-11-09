@@ -38,6 +38,8 @@ module DB
 
         new_operator_body = kwargs.any? ? kwargs : AndOrContext.new.tap { _1.instance_eval(&block) }.body
         operator_body = where_query[name] || where_query
+        p operator_body
+        p new_operator_body
         self.where_query = { name => operator_body.merge(new_operator_body) }
 
         self
