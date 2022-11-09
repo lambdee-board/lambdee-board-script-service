@@ -11,7 +11,8 @@
     "msgpack",
     "Ractor",
     "stringio",
-    "testtask"
+    "testtask",
+    "unathorised"
   ],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#c87659",

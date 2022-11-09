@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../../../../config/env_settings'
+require 'faraday'
+
+require_relative '../config/env_settings'
 
 # Wraps the Lambdee API.
 module LambdeeAPI

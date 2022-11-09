@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../workers'
+require_relative '../lambdee_api'
 
 module WebSocket
   # Controls websocket connections with the browser.
@@ -8,23 +9,63 @@ module WebSocket
     # This will get hit after this Controller gets attached to a request
     #
     # @param connection [Iodine::Connection]
+    # @return [void]
     def on_open(connection)
-      @repl_worker = ::Workers::Ruby::REPL.new
-      connection.close if @repl_worker.closed?
+      @auth_complete = false
 
       connection.write Message.encode(
-        type: :console_output_end,
-        payload: <<~TXT
-          Connected to the Lambdee Console
-          Ruby: #{::RUBY_VERSION}
-        TXT
+        type: :info,
+        payload: 'Connection established.'
       )
     end
 
     # This will get hit when the client sends a message via the websocket
     #
     # @param connection [Iodine::Connection]
+    # @param data [String, nil]
+    # @return [void]
     def on_message(connection, data)
+      return authorise(connection, data) unless @auth_complete
+
+      authorised_message(connection, data)
+    end
+
+    # This will get hit when the the connection.write buffer becomes empty
+    #
+    # @param connection [Iodine::Connection]
+    # @return [void]
+    def on_drained(connection); end
+
+    # This will get hit when the websocket connection gets closed from the server
+    #
+    # @param connection [Iodine::Connection]
+    # @return [void]
+    def on_shutdown(connection)
+      @repl_worker&.close
+      connection.write Message.encode(
+        type: :console_output,
+        payload: 'Closing the session.'
+      )
+    end
+
+    # This will get hit when the websocket connection gets closed from the client
+    #
+    # @param connection [Iodine::Connection]
+    # @return [void]
+    def on_close(connection)
+      @repl_worker&.close
+      connection.write Message.encode(
+        type: :console_output,
+        payload: 'Closing the session'
+      )
+    end
+
+    private
+
+    # @param connection [Iodine::Connection]
+    # @param data [String, nil]
+    # @return [void]
+    def authorised_message(connection, data)
       message = Message.decode(data)
       case message.type
       when :console_input
@@ -51,31 +92,53 @@ module WebSocket
       connection.close
     end
 
-    # This will get hit when the the connection.write buffer becomes empty
-    #
     # @param connection [Iodine::Connection]
-    def on_drained(connection); end
+    # @param data [String, nil]
+    # @return [void]
+    def authorise(connection, data)
+      message = Message.decode(data)
+      return connection.close unless message.type == :auth
 
-    # This will get hit when the websocket connection gets closed from the server
-    #
-    # @param connection [Iodine::Connection]
-    def on_shutdown(connection)
-      @repl_worker&.close
+      response = ::LambdeeAPI.http_connection.get('users/current') do |req|
+        req.headers['Authorization'] = message.dig(:payload, :token)
+      end
+
+      return unauthenticated!(connection) if response.status != 200
+
+      json = ::JSON.parse response.body, symbolize_names: true
+      return unauthorised!(connection) unless %w[admin developer].include? json[:role]
+
       connection.write Message.encode(
-        type: :console_output,
-        payload: 'Closing the session'
+        type: :info,
+        payload: <<~TXT
+          Connected to the Lambdee Console.
+          Ruby: #{::RUBY_VERSION}
+        TXT
       )
+
+      @repl_worker = ::Workers::Ruby::REPL.new
+      connection.close if @repl_worker.closed?
+      @auth_complete = true
     end
 
-    # This will get hit when the websocket connection gets closed from the client
-    #
     # @param connection [Iodine::Connection]
-    def on_close(connection)
-      @repl_worker&.close
+    # @return [void]
+    def unauthenticated!(connection)
       connection.write Message.encode(
-        type: :console_output,
-        payload: 'Closing the session'
+        type: :info,
+        payload: 'Unauthenticated!'
       )
+      connection.close
+    end
+
+    # @param connection [Iodine::Connection]
+    # @return [void]
+    def unathorised!(connection)
+      connection.write Message.encode(
+        type: :info,
+        payload: 'Unauthorised access!'
+      )
+      connection.close
     end
   end
 end
