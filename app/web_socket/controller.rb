@@ -99,9 +99,8 @@ module WebSocket
       message = Message.decode(data)
       return connection.close unless message.type == :auth
 
-      response = ::LambdeeAPI.http_connection.get('users/current') do |req|
-        req.headers['Authorization'] = message.dig(:payload, :token)
-      end
+      response = ::LambdeeAPI.http_connection(authorisation: message.dig(:payload, :token))
+                             .get('users/current')
 
       return unauthenticated!(connection) if response.status != 200
 
