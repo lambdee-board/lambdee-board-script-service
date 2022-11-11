@@ -132,7 +132,7 @@ module WebSocket
 
     # @param connection [Iodine::Connection]
     # @return [void]
-    def unathorised!(connection)
+    def unauthorised!(connection)
       connection.write Message.encode(
         type: :info,
         payload: 'Unauthorised access!'
