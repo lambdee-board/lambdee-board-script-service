@@ -2,7 +2,7 @@
 
 require 'socket'
 require 'logger'
-require 'debug' unless %w[production test].include? ENV['RACK_ENV']
+require 'debug' unless %w[production test].include? ::ENV['RACK_ENV']
 
 # from the shared library with the Sinatra app
 require_relative '../../../utils'
@@ -14,12 +14,19 @@ require_relative '../lib/console'
 require_relative '../lib/constant_freezer'
 
 # @return [Logger]
-::LOGGER = ::Logger.new($stdout)
-::LOGGER.level = if %w[production test].include? ENV['RACK_ENV']
-                   ::Logger::INFO
-                 else
-                   ::Logger::DEBUG
-                 end
+::LOGGER =
+  if %w[production test].include? ::ENV['RACK_ENV']
+    ::Logger.new(
+      ::File.expand_path('../../../../log/ruby_repl.log', __dir__),
+      4,
+      level: ::Logger::INFO
+    )
+  else
+    ::Logger.new(
+      $stdout,
+      level: ::Logger::DEBUG
+    )
+  end
 
 ::Utils.format_logger(::LOGGER)
 
