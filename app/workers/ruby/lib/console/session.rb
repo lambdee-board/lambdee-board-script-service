@@ -3,25 +3,8 @@
 require 'stringio'
 require 'timeout'
 
-require_relative '../censor'
-
-using ::Censor::Refinement
-
-# rubocop:disable Style/TopLevelMethodDefinition
-
-# @return [Binding]
-def __anonymous_binding__
-  anonymous_binding = nil
-  ::Module.new do
-    extend self
-
-    anonymous_binding = binding
-  end
-
-  anonymous_binding
-end
-
-# rubocop:enable Style/TopLevelMethodDefinition
+require_relative 'string_input_method'
+require_relative '../safe_binding'
 
 module Console
   # Creates an IRB session and provides methods
@@ -36,7 +19,7 @@ module Console
     def initialize
       @input_method = StringInputMethod.new
 
-      workspace = ::IRB::WorkSpace.new(__anonymous_binding__)
+      workspace = ::IRB::WorkSpace.new(__safe_binding__)
       @irb = ::IRB::Irb.new(workspace, @input_method)
     end
 

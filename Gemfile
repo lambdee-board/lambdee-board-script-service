@@ -5,13 +5,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.1.2'
 
+gem 'activesupport', '~> 7.0'
 gem 'awesome_print' # better output in the console
+gem 'faraday' # HTTP client
 gem 'iodine', '~> 0.7' # HTTP and WebSocket server
 gem 'refrigerator' # for freezing built-in classes/modules
 gem 'shale' # object mapper and serializer for JSON and other formats
 gem 'sinatra' # HTTP server framework
 gem 'sorted_set' # adds a Set subclass which sorts its contents
-gem 'faraday' # HTTP client
 
 group :development do
   gem 'solargraph', require: false # language server for IDEs

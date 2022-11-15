@@ -6,3 +6,4 @@
 module Workers::Ruby; end
 
 require_relative 'ruby/repl'
+require_relative 'ruby/script'

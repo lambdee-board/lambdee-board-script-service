@@ -11,7 +11,7 @@ require_relative '../../unix_socket'
 # Communication with this process is based on UNIX Sockets.
 class Workers::Ruby::REPL
   # @return [String]
-  START_SCRIPT_PATH = ::File.expand_path('repl/script.rb', __dir__)
+  RUN_FILE_PATH = ::File.expand_path('repl/run.rb', __dir__)
   # Max time in seconds of how long the class should try to
   # connect to the worker process through a UNIX Socket.
   #
@@ -26,7 +26,7 @@ class Workers::Ruby::REPL
   # the process and Socket will linger.
   def initialize
     @closed = false
-    @pid = spawn(::RbConfig.ruby, START_SCRIPT_PATH)
+    @pid = spawn(::RbConfig.ruby, RUN_FILE_PATH)
     ::Process.detach(@pid)
     ::LOGGER.info "spawned Ruby repl-worker #{@pid}"
     socket_path = ::UnixSocket.repl_worker_path(@pid)
