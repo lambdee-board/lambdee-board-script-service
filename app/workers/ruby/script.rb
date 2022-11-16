@@ -2,7 +2,7 @@
 
 # Represents a single Script worker -- a separate process
 # which securely executes Ruby code and returns its output.
-class Workers::Ruby::Script
+module Workers::Ruby::Script
   # @return [String]
   RUN_FILE_PATH = ::File.expand_path('script/run.rb', __dir__)
   # Max time in seconds of how long the class should try to

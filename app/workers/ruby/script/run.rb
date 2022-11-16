@@ -43,19 +43,25 @@ end
 output = ::StringIO.new
 $stdout = output
 code, script_run_id = ::ARGV
+script_state = :executed
 begin
   ::Timeout.timeout(::Config::SCRIPT_EXECUTION_TIMEOUT) do
     eval code, __safe_binding__, '(script)' # rubocop:disable Security/Eval
   end
 rescue ::Timeout::Error => e
   puts e.full_message
-rescue ::Exception => e # rubocop:disable Lint/RescueException, Lint/DuplicateBranch
+  script_state = :timed_out
+rescue ::Exception => e # rubocop:disable Lint/RescueException
   puts e.full_message
+  script_state = :failed
 end
 
 $stdout = ::STDOUT # rubocop:disable Style/GlobalStdStream
-::LOGGER.debug output.string unless %w[production test].include? ::ENV['RACK_ENV']
+::LOGGER.debug "Script Output:\n#{output.string}" unless %w[production test].include? ::ENV['RACK_ENV']
 
 ::LambdeeAPI.http_connection.patch("script_runs/#{script_run_id}") do |req|
-  req.body = { output: output.string }.to_json
+  req.body = {
+    output: output.string,
+    state: script_state
+  }.to_json
 end
