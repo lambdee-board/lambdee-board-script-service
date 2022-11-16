@@ -12,6 +12,10 @@ module Workers::Ruby::Script
   SOCKET_CONNECTION_TIMEOUT = 5
 
   class << self
+    # Spin up a new Ruby process which will safely execute
+    # the provided code and send a callback with its state
+    # and output to the main Lambdee backend.
+    #
     # @param code [String]
     # @param script_run_id [Integer]
     def execute(code, script_run_id)
