@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'uri'
+require 'base64'
 
 module Config
   # @return [String]
@@ -18,14 +19,13 @@ module Config
   # with the main Lambdee API Service
   #
   # @return [String]
-  LAMBDEE_API_AUTHORISATION_HEADER = "ScriptService #{SCRIPT_SERVICE_SECRET}"
-  # Secret key used by the main Lambdee backend app to
-  # authenticate with this Script Service.
-  #
-  # @return [String]
-  LAMBDEE_BACKEND_SECRET = ::ENV['LAMBDEE_BACKEND_SECRET'] || 'sikritToken123'
+  LAMBDEE_API_AUTHORISATION_HEADER = "ScriptService #{::Base64.encode64 SCRIPT_SERVICE_SECRET}"
   # Maximum amount of seconds for executing a script.
   #
   # @return [Integer]
   SCRIPT_EXECUTION_TIMEOUT = 4
+  # @return [String]
+  API_USER = ::ENV['SCRIPT_SERVICE_API_USER'] || 'lambdee'
+  # @return [String]
+  API_PASSWORD = ::ENV['SCRIPT_SERVICE_API_PASSWORD'] || 'sikritToken123'
 end

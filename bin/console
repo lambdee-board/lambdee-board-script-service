@@ -3,9 +3,7 @@
 
 require 'debug'
 require_relative '../app'
-
-::AwesomePrint.defaults.merge!({
-  plain: false,
-})
+require 'irb'
+require 'awesome_print'
 
 ::IRB.start

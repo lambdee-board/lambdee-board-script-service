@@ -2,6 +2,7 @@
 
 require 'sinatra/base'
 require 'json'
+require 'active_support/security_utils'
 
 require_relative '../web_socket'
 require_relative '../workers'
@@ -9,8 +10,8 @@ require_relative '../workers'
 class ::Controllers::App < ::Sinatra::Base
   use ::WebSocket::Middleware
 
-  post '/execute' do
-    unless authenticate_lambdee(request.env['HTTP_AUTHORIZATION']) # rubocop:disable Style/IfUnlessModifier
+  post '/api/execute' do
+    unless authenticate(request.env['HTTP_AUTHORIZATION']) # rubocop:disable Style/IfUnlessModifier
       return [422, { 'Content-Type' => 'application/json' }, { error: 'Unauthorized access!' }.to_json]
     end
 
@@ -23,8 +24,10 @@ class ::Controllers::App < ::Sinatra::Base
 
   # @param auth_header [String, nil]
   # @return [Boolean]
-  def authenticate_lambdee(auth_header)
-    auth_scheme, auth_token = auth_header&.split(' ')
-    auth_scheme && auth_scheme == 'Lambdee' && auth_token == ::Config::LAMBDEE_BACKEND_SECRET
+  def authenticate(auth_header)
+    auth_scheme, credentials = auth_header&.split(' ')
+    return false unless auth_scheme == 'Basic' && credentials
+
+    ::ActiveSupport::SecurityUtils.secure_compare(::Base64.decode64(credentials), "#{::Config::API_USER}:#{::Config::API_PASSWORD}")
   end
 end

@@ -45,7 +45,7 @@ $stdout = output
 code, script_run_id = ::ARGV
 script_state = :executed
 begin
-  ::Timeout.timeout(::Config::SCRIPT_EXECUTION_TIMEOUT) do
+  ::Timeout.timeout(::Config::SCRIPT_EXECUTION_TIMEOUT, nil, "execution took longer than allowed #{::Config::SCRIPT_EXECUTION_TIMEOUT} seconds") do
     eval code, __safe_binding__, '(script)' # rubocop:disable Security/Eval
   end
 rescue ::Timeout::Error => e
