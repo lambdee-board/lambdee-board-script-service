@@ -2,8 +2,9 @@
 # frozen_string_literal: true
 
 require 'debug'
-require_relative '../app'
 require 'irb'
 require 'awesome_print'
+require_relative '../app'
+require_relative '../app/workers/ruby/lib/db'
 
 ::IRB.start

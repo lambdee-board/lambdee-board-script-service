@@ -2,7 +2,7 @@
 
 require 'sinatra/base'
 require 'json'
-require 'active_support/security_utils'
+require 'active_support/all'
 
 require_relative '../web_socket'
 require_relative '../workers'

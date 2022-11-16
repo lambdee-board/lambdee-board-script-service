@@ -73,7 +73,7 @@ module DB
       def has_many_through(name, klass, through:, foreign_key:)
         relation_methods_module.class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def #{name}
-            #{klass}.join(#{through}).where('#{through}.#{foreign_key}': id)
+            #{klass}.join(:#{through}).where('#{through}.#{foreign_key}': id)
           end
         RUBY
       end
