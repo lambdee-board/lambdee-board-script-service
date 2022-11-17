@@ -180,3 +180,6 @@ AllCops:
 
 Layout/HeredocArgumentClosingParenthesis:
   Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false

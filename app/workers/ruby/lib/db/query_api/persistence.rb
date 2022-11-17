@@ -7,24 +7,76 @@ module DB
   module QueryAPI
     # Provides methods for saving, updating and deleting records.
     module Persistence
+      # Represents a single attribute change
+      class AttributeChange
+        # @return [Symbol]
+        attr_accessor :name
+        # @return [Object]
+        attr_accessor :from
+        # @return [Object]
+        attr_accessor :to
+
+        # @param name [Symbol]
+        # @param from [Object]
+        # @param to [Object]
+        def initialize(name, from: nil, to: nil)
+          @name = name
+          @from = from
+          @to = to
+        end
+      end
+
+      # Class methods for models with persistence.
       module ClassMethods
         # @param kwargs [Hash{Symbol => Object}]
         # @return [self]
         def create(**kwargs)
           obj = new(**kwargs)
+          obj.after_initialize!
           obj.save!
           obj
         end
+
+        # @param hash [Hash{String => Object}]
+        # @param kwargs [Hash]
+        # @return [self]
+        def of_hash(hash, **kwargs)
+          obj = super
+          obj.after_initialize!
+          obj
+        end
+        alias from_hash of_hash
 
         # @param record [Hash{String => Object}]
         # @return [self]
         def from_record(record)
           obj = from_hash(record)
+          obj.after_initialize!
           obj.persisted!
           obj
         end
+
+        # @param args [Array]
+        # @param kwargs [Hash]
+        # @return [void]
+        def attribute(*args, **kwargs)
+          super
+          attr_name = args.first
+          persistence_methods.define_method :"#{attr_name}=" do |val|
+            register_attribute_change(attr_name, from: public_send(attr_name), to: val) if after_initialize?
+            super(val)
+          end
+        end
+
+        private
+
+        # @return [Module]
+        def persistence_methods
+          @persistence_methods ||= ::Module.new.tap { include _1 }
+        end
       end
 
+      # Instance methods for models with persistence.
       module InstanceMethods
         # @return [Boolean]
         attr_reader :persisted
@@ -53,15 +105,14 @@ module DB
           @deleted = true
         end
 
-        # TODO: implement changed?
-        # @return [Boolean]
-        def changed?
-          !!@changed
+        # @return [ActiveSupport::HashWithIndifferentAccess]
+        def changed_attributes
+          @changed_attributes ||= ::ActiveSupport::HashWithIndifferentAccess.new
         end
 
-        # @return [void]
-        def changed!
-          @changed = true
+        # @return [Boolean]
+        def changed?
+          !changed_attributes.empty?
         end
 
         # @return [self]
@@ -94,6 +145,7 @@ module DB
           raise ServerFailure, response if response.status >= 500
 
           reload_from_json(response.body)
+          persisted!
 
           self
         end
@@ -121,6 +173,16 @@ module DB
           false
         end
 
+        # @return [Boolean]
+        def after_initialize?
+          !!@after_initialize
+        end
+
+        # @return [void]
+        def after_initialize!
+          @after_initialize = true
+        end
+
         private
 
         # @param json [String]
@@ -133,6 +195,20 @@ module DB
 
             public_send(setter, val)
           end
+        end
+
+        # @param name [Symbol]
+        # @param from [Object]
+        # @param to [Object]
+        # @return [void]
+        def register_attribute_change(name, from: nil, to: nil)
+          unless (changed_attribute = changed_attributes[name])
+            changed_attributes[name] = AttributeChange.new(name, from:, to:)
+            return
+          end
+
+          changed_attribute.to = to
+          nil
         end
 
       end
