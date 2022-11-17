@@ -40,7 +40,6 @@ end
 ::LOGGER.info 'starting script execution'
 
 code, script_run_id = ::ARGV
-code.prepend "context = ::ActiveSupport::HashWithIndifferentAccess.new\n"
 script_state = :executed
 
 output = ::StringIO.new

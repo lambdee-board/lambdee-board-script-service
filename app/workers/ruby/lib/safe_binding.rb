@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/all'
+
 require_relative 'censor'
 
 using ::Censor::Refinement
@@ -15,6 +17,7 @@ define_method :__safe_binding__ do
     # @return [String]
     def inspect = 'main'
 
+    context = ::ActiveSupport::HashWithIndifferentAccess.new
     safe_binding = binding
   end
 
