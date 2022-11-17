@@ -8,12 +8,16 @@ module DB
       extend ::ActiveSupport::Concern
 
       included do
+        extend ClassMethods
         attribute :custom_data, ::Shale::Type::Value, default: -> { ::Hash.new } # rubocop:disable Style/EmptyLiteral
       end
 
-      # @return [Boolean] Whether this object supports custom data.
-      def custom_data?
-        true
+      # Class methods for models with custom data.
+      module ClassMethods
+        # @return [Boolean] Whether this object supports custom data.
+        def custom_data_supported?
+          true
+        end
       end
     end
   end

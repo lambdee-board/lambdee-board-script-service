@@ -31,6 +31,16 @@ module DB
       def model_table_name_map
         @@model_table_name_map
       end
+
+      # @return [Boolean] Whether this object supports custom data.
+      def custom_data_supported?
+        false
+      end
+
+      # @return [Array<Symbol>]
+      def attribute_names
+        attributes.keys
+      end
     end
 
     alias to_h to_hash
@@ -46,8 +56,8 @@ module DB
     attribute :updated_at, ::Shale::Type::Time
 
     # @return [Boolean] Whether this object supports custom data.
-    def custom_data?
-      false
+    def custom_data_supported?
+      self.class.custom_data_supported?
     end
   end
 end

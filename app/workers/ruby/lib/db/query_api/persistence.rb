@@ -64,6 +64,9 @@ module DB
             register_attribute_change(attr_name, from: public_send(attr_name), to: val) if after_initialize?
             super(val)
           end
+          persistence_methods.define_method :"#{attr_name}?" do
+            !public_send(attr_name).nil?
+          end
         end
 
         private
