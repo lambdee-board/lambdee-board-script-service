@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../../hash_like_access'
+
 module DB
   module QueryAPI
     module Relation
@@ -11,6 +13,8 @@ module DB
       #
       # @abstract Subclass to create a new relation type.
       class Base
+        include ::HashLikeAccess
+
         class << self
           # @return [Symbol] Type of the relation.
           attr_accessor :type
@@ -38,7 +42,7 @@ module DB
         end
 
         # @return [Hash]
-        def to_h
+        def to_h(_options = {})
           {
             name:,
             type:,

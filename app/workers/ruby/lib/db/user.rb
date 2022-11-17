@@ -5,6 +5,7 @@ module DB
   # users of the Lambdee Agile Board.
   class User < BaseModel
     include QueryAPI::CustomData
+    include QueryAPI::Deletable
 
     # @!attribute [r] comments
     #   @return [QueryAPI::Query]
@@ -37,14 +38,6 @@ module DB
     # @!attribute [rw] role
     #   @return [String] Role of the user.
     attribute :role, ::Shale::Type::String
-    # @!attribute [rw] deleted_at
-    #   @return [Time] When the user was deleted.
-    attribute :deleted_at, ::Shale::Type::Time
     # TODO: nil values should be in `to_json`!
-
-    # @return [Boolean]
-    def deleted?
-      !deleted_at.nil?
-    end
   end
 end

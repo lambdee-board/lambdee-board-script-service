@@ -21,7 +21,7 @@ module DB
         end
 
         # @return [Hash]
-        def to_h
+        def to_h(_options = {})
           {
             **super,
             through: through.to_h

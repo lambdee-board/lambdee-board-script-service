@@ -3,6 +3,7 @@
 require 'shale'
 
 require_relative 'query_api'
+require_relative '../hash_like_access'
 
 module DB
   # @abstract Subclass to define a new Database Model class
@@ -12,6 +13,7 @@ module DB
     extend QueryAPI::Searching
     extend QueryAPI::Persistence::ClassMethods
     include QueryAPI::Persistence::InstanceMethods
+    include ::HashLikeAccess
 
     # @return [Hash{Symbol => self}]
     @@model_table_name_map = {} # rubocop:disable Style/ClassVars
@@ -58,20 +60,6 @@ module DB
     # @return [Boolean] Whether this object supports custom data.
     def custom_data_supported?
       self.class.custom_data_supported?
-    end
-
-    # @param key [Symbol, String]]
-    # @return [Object]
-    def [](key)
-      return unless respond_to?(key)
-
-      public_send(key)
-    end
-
-    # @param key [Symbol, String]
-    # @param val [Object]
-    def []=(key, val)
-      public_send(:"#{key}=", val)
     end
   end
 end

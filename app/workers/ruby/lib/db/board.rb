@@ -7,6 +7,7 @@ module DB
   # A Board contains Lists of Tasks.
   class Board < BaseModel
     include QueryAPI::CustomData
+    include QueryAPI::Deletable
 
     # @!attribute [rw] workspace_id
     #   @return [Integer] ID of the associated workspace.
@@ -27,13 +28,5 @@ module DB
     # @!attribute [rw] colour
     #   @return [String, nil] HEX colour of the board.
     attribute :colour, ::Shale::Type::String
-    # @!attribute [rw] deleted_at
-    #   @return [Time, nil] When the board was deleted.
-    attribute :deleted_at, ::Shale::Type::Time
-
-    # @return [Boolean]
-    def deleted?
-      !deleted_at.nil?
-    end
   end
 end

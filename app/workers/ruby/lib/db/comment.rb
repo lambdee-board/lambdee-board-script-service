@@ -7,6 +7,9 @@ module DB
   # A comment has an author (a User who created it)
   # and a Task to which it is attached.
   class Comment < BaseModel
+    include QueryAPI::CustomData
+    include QueryAPI::Deletable
+
     # @!attribute [rw] author_id
     #   @return [Integer] ID of the associated author.
     # @!attribute [rw] author
@@ -22,13 +25,5 @@ module DB
     #   @return [String, nil] Body of the comment
     #     formatted in Markdown.
     attribute :body, ::Shale::Type::String
-    # @!attribute [rw] deleted_at
-    #   @return [Time, nil] When the board was deleted.
-    attribute :deleted_at, ::Shale::Type::Time
-
-    # @return [Boolean]
-    def deleted?
-      !deleted_at.nil?
-    end
   end
 end

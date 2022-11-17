@@ -8,6 +8,7 @@ module DB
   # users who can access those boards.
   class Workspace < BaseModel
     include QueryAPI::CustomData
+    include QueryAPI::Deletable
 
     # @!attribute [r] boards
     #   @return [QueryAPI::Query]
@@ -22,10 +23,5 @@ module DB
     # @!attribute [rw] name
     #   @return [String] Name of the workspace.
     attribute :name, ::Shale::Type::String
-
-    # @return [Boolean]
-    def deleted?
-      !deleted_at.nil?
-    end
   end
 end
