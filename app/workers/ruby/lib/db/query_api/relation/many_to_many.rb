@@ -19,15 +19,6 @@ module DB
           super(name, base_class:, target_class:, foreign_key:)
           @through = base_class.relations[through]
         end
-
-        # @return [Hash]
-        def to_h(_options = {})
-          {
-            **super,
-            through: through.to_h
-          }
-        end
-        alias to_hash to_h
       end
     end
   end

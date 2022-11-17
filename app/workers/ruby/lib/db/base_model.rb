@@ -4,6 +4,7 @@ require 'shale'
 
 require_relative 'query_api'
 require_relative '../hash_like_access'
+require_relative '../hash_convertible'
 
 module DB
   # @abstract Subclass to define a new Database Model class
@@ -62,4 +63,9 @@ module DB
       self.class.custom_data_supported?
     end
   end
+end
+
+class Shale::Attribute
+  include ::HashLikeAccess
+  include ::HashConvertible
 end

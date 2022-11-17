@@ -10,6 +10,19 @@ module DB
       def relations
         @relations ||= ::ActiveSupport::HashWithIndifferentAccess.new
       end
+      alias associations relations
+
+      # @return [Array<Symbol>]
+      def relation_names
+        @relations.map { |key, _val| key.to_sym }
+      end
+      alias association_names relation_names
+
+      # @return [Array<Class>]
+      def associated_classes
+        @relations.map { |_key, val| val.target_class }
+      end
+      alias related_classes associated_classes
 
       # @param name [Symbol] Name of the relation
       # @param klass [Class] Class of the related object
