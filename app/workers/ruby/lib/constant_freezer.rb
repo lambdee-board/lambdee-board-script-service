@@ -10,7 +10,7 @@ module ConstantFreezer
     # @return [void]
     def call
       ::Refrigerator.freeze_core(except: %w[Object])
-      freeze_all_constants
+      # freeze_all_constants
     end
 
     private

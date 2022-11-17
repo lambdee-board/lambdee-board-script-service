@@ -7,10 +7,13 @@ using ::Censor::Refinement
 # rubocop:disable Style/TopLevelMethodDefinition
 
 # @return [Binding]
-def __safe_binding__
+define_method :__safe_binding__ do
   safe_binding = nil
   ::Module.new do
     extend self
+
+    # @return [String]
+    def inspect = 'main'
 
     safe_binding = binding
   end

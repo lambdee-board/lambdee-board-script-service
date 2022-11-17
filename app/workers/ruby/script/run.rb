@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_support/all'
-require 'socket'
 require 'logger'
 require 'stringio'
 require 'debug' unless %w[production test].include? ::ENV['RACK_ENV']

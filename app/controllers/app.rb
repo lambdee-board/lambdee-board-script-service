@@ -3,6 +3,7 @@
 require 'sinatra/base'
 require 'json'
 require 'active_support/all'
+require 'active_support/security_utils'
 
 require_relative '../web_socket'
 require_relative '../workers'
@@ -12,12 +13,14 @@ class ::Controllers::App < ::Sinatra::Base
 
   post '/api/execute' do
     unless authenticate(request.env['HTTP_AUTHORIZATION']) # rubocop:disable Style/IfUnlessModifier
-      return [422, { 'Content-Type' => 'application/json' }, { error: 'Unauthorized access!' }.to_json]
+      return [401, { 'Content-Type' => 'application/json' }, { error: 'Unauthorized access!' }.to_json]
     end
 
     request.body.rewind  # in case something already read it
     data = ::JSON.parse request.body.read, symbolize_names: true
     ::Workers::Ruby::Script.execute(data[:content], data[:script_run_id])
+  rescue ::JSON::ParserError
+    [422, { 'Content-Type' => 'application/json' }, { error: 'Invalid request body!' }.to_json]
   end
 
   private
