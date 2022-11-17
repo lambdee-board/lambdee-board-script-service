@@ -45,7 +45,6 @@ module DB
           obj.after_initialize!
           obj
         end
-        alias from_hash of_hash
 
         # @param record [Hash{String => Object}]
         # @return [self]
