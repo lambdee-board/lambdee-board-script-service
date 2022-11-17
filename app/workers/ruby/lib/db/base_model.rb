@@ -23,7 +23,7 @@ module DB
       # @param subclass [Class<self>]
       def inherited(subclass)
         super
-        subclass.table_name = "#{subclass.name.split('::').last.downcase}s".to_sym
+        subclass.table_name = "#{subclass.name.split('::').last.underscore}s".to_sym
         @@model_table_name_map[subclass.table_name] = subclass
       end
 
