@@ -33,6 +33,8 @@ module DB
       end
     end
 
+    alias to_h to_hash
+
     # @!attribute [r] id
     #   @return [Integer] ID of the record.
     attribute :id, ::Shale::Type::Integer
