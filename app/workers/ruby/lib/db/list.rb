@@ -7,6 +7,8 @@ module DB
   # A List belongs to a Board,
   # and contains Tasks.
   class List < BaseModel
+    include QueryAPI::CustomData
+
     # @!attribute [rw] board_id
     #   @return [Integer] ID of the associated board.
     # @!attribute [rw] board

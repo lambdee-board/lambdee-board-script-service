@@ -7,6 +7,8 @@ module DB
   # A Workspace is a collection of boards and
   # users who can access those boards.
   class Workspace < BaseModel
+    include QueryAPI::CustomData
+
     # @!attribute [r] boards
     #   @return [QueryAPI::Query]
     has_many :boards, 'Board'

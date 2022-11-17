@@ -44,5 +44,10 @@ module DB
     # @!attribute [rw] updated_at
     #   @return [Time] When the record was last updated.
     attribute :updated_at, ::Shale::Type::Time
+
+    # @return [Boolean] Whether this object supports custom data.
+    def custom_data?
+      false
+    end
   end
 end

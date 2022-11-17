@@ -5,6 +5,8 @@ module DB
   # individual tags which
   # can be attached to tasks in the Lambdee Agile Board.
   class Tag < BaseModel
+    include QueryAPI::CustomData
+
     # @!attribute [rw] board_id
     #   @return [Integer] ID of the associated board.
     # @!attribute [rw] board

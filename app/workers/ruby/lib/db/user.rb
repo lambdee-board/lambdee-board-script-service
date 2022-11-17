@@ -4,6 +4,8 @@ module DB
   # Instances of this class represent
   # users of the Lambdee Agile Board.
   class User < BaseModel
+    include QueryAPI::CustomData
+
     # @!attribute [r] comments
     #   @return [QueryAPI::Query]
     has_many :comments, 'Comment'

@@ -50,7 +50,6 @@ module DB
         # @return [self]
         def from_record(record)
           obj = from_hash(record)
-          obj.after_initialize!
           obj.persisted!
           obj
         end
@@ -91,6 +90,9 @@ module DB
 
         # @return [void]
         def persisted!
+          return if persisted?
+
+          after_initialize!
           @persisted = true
         end
 

@@ -6,6 +6,8 @@ module DB
   #
   # A Board contains Lists of Tasks.
   class Board < BaseModel
+    include QueryAPI::CustomData
+
     # @!attribute [rw] workspace_id
     #   @return [Integer] ID of the associated workspace.
     # @!attribute [rw] workspace
