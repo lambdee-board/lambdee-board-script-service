@@ -23,7 +23,7 @@ module DB
       # @param subclass [Class<self>]
       def inherited(subclass)
         super
-        subclass.table_name = "#{subclass.name.split('::').last.underscore}s".to_sym
+        subclass.table_name = ::DB.table_name(subclass)
         @@model_table_name_map[subclass.table_name] = subclass
       end
 
@@ -58,6 +58,20 @@ module DB
     # @return [Boolean] Whether this object supports custom data.
     def custom_data_supported?
       self.class.custom_data_supported?
+    end
+
+    # @param key [Symbol, String]]
+    # @return [Object]
+    def [](key)
+      return unless respond_to?(key)
+
+      public_send(key)
+    end
+
+    # @param key [Symbol, String]
+    # @param val [Object]
+    def []=(key, val)
+      public_send(:"#{key}=", val)
     end
   end
 end

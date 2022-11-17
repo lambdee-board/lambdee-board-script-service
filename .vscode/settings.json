@@ -11,6 +11,7 @@
     "msgpack",
     "Ractor",
     "stringio",
+    "tableize",
     "testtask",
     "unathorised"
   ],

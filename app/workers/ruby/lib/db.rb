@@ -17,6 +17,13 @@ module DB
     def table_names
       BaseModel.model_table_name_map.keys
     end
+
+    # @param class_name [String, Class]
+    # @return [Symbol]
+    def table_name(class_name)
+      class_name = class_name.name if class_name.respond_to?(:name)
+      "#{class_name.split('::').last.underscore}s".to_sym
+    end
   end
 end
 
