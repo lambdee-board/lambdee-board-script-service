@@ -39,10 +39,12 @@ end
 
 ::LOGGER.info 'starting script execution'
 
+code, script_run_id = ::ARGV
+code.prepend "context = ::ActiveSupport::HashWithIndifferentAccess.new\n"
+script_state = :executed
+
 output = ::StringIO.new
 $stdout = output
-code, script_run_id = ::ARGV
-script_state = :executed
 begin
   ::Timeout.timeout(::Config::SCRIPT_EXECUTION_TIMEOUT, nil, "execution took longer than allowed #{::Config::SCRIPT_EXECUTION_TIMEOUT} seconds") do
     eval code, __safe_binding__, '(script)' # rubocop:disable Security/Eval
