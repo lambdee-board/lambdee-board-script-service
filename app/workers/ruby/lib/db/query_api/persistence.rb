@@ -184,6 +184,11 @@ module DB
 
         private
 
+        # @return [void]
+        def reset_changed_attributes
+          @changed_attributes = ::ActiveSupport::HashWithIndifferentAccess.new
+        end
+
         # @param json [String]
         # @return [void]
         def reload_from_json(json)
@@ -194,6 +199,7 @@ module DB
 
             public_send(setter, val)
           end
+          reset_changed_attributes
         end
 
         # @param name [Symbol]
