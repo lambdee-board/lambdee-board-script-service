@@ -54,8 +54,11 @@ module DB
     # @!attribute [rw] spent_time
     #   @return [Integer] Number of seconds spent on this task.
     attribute :spent_time, ::Shale::Type::String
-    # @!attribute [rw] start_time
-    #   @return [Time, nil] When the timer for this task has been started.
+    # @!attribute [rw] spent_time
+    #   @return [Integer] Number of seconds spent on this task.
+    attribute :due_time, ::Shale::Type::Time
+    # @!attribute [rw] due_time
+    #   @return [Time, nil] Due time of this task.
     attribute :start_time, ::Shale::Type::Time
   end
 end

@@ -40,6 +40,12 @@ end
 ::LOGGER.info 'starting script execution'
 
 code, script_run_id = ::ARGV
+code = <<~RUBY
+  lambda do
+    #{code}
+  end.call
+RUBY
+
 script_state = :executed
 
 output = ::StringIO.new
