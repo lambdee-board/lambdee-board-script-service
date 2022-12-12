@@ -131,9 +131,10 @@ module DB
           self
         end
 
+        # @param trigger_scripts [Boolean]
         # @return [self]
         # @raise [Error]
-        def save!
+        def save!(trigger_scripts: false)
           if persisted?
             path = "#{self.class.table_name}/#{id}"
             http_method = :put
@@ -143,7 +144,7 @@ module DB
           end
 
           response = ::LambdeeAPI.http_connection.public_send(http_method, path) do |req|
-            req.body = to_json
+            req.body = update_create_body(trigger_scripts: trigger_scripts)
           end
           raise InvalidRecordError, response if (300...500).include? response.status
           raise ServerFailure, response if response.status >= 500
@@ -169,9 +170,10 @@ module DB
           self
         end
 
+        # @param trigger_scripts [Boolean]
         # @return [Boolean]
-        def save
-          save!
+        def save(trigger_scripts: false)
+          save!(trigger_scripts:)
           true
         rescue Error
           false
@@ -188,6 +190,15 @@ module DB
         end
 
         private
+
+        # @param trigger_scripts [Boolean]
+        # @return [String]
+        def update_create_body(trigger_scripts: false)
+          {
+            **as_json,
+            trigger_scripts:
+          }.to_json
+        end
 
         # @return [void]
         def reset_changed_attributes
