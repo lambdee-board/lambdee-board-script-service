@@ -6,7 +6,7 @@ module Censor
   class << self
     # Override dangerous parts of Ruby
     def override_dangerous_things
-      ::Object.const_set(:ENV, {}.freeze)
+      ::Object.const_set(:ENV, { 'HOME' => '' }.freeze)
 
       # Internal Ruby module used for printing warnings.
       # Ruby warnings like constant reassigning will now raise errors.
@@ -145,7 +145,6 @@ module Censor
 
         # override singleton/class methods
         refine censored_methods.singleton_class do
-          p censored_methods.singleton_class if censored_methods.singleton_class == ENV.singleton_class
           import_methods this.censored_methods_module(censored_methods, type: :singleton)
         end
       end
