@@ -16,8 +16,9 @@ define_method :__safe_binding__ do
 
     # @return [String]
     def inspect = 'main'
+    attr_accessor :context
 
-    context = ::ActiveSupport::HashWithIndifferentAccess.new
+    self.context = ::ActiveSupport::HashWithIndifferentAccess.new
     safe_binding = binding
   end
 
