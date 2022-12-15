@@ -16,7 +16,7 @@ require_relative '../lib/constant_freezer'
 
 # @return [Logger]
 ::LOGGER =
-  if %w[production test].include? ::ENV['RACK_ENV']
+  if %w[production test].include? ::Config::RACK_ENV
     ::Logger.new(
       ::File.expand_path('../../../../log/ruby_repl.log', __dir__),
       4,
@@ -39,6 +39,8 @@ at_exit { ::LOGGER.info 'dying' }
 end
 
 ::LOGGER.info 'starting unix socket server'
+
+::Censor.override_dangerous_things
 
 ::CONSOLE_SESSION = ::Console::Session.new
 

@@ -15,7 +15,7 @@ require_relative '../lib/constant_freezer'
 
 # @return [Logger]
 ::LOGGER =
-  if %w[production test].include? ::ENV['RACK_ENV']
+  if %w[production test].include? ::Config::RACK_ENV
     ::Logger.new(
       ::File.expand_path('../../../../log/ruby_script.log', __dir__),
       4,
@@ -38,6 +38,8 @@ at_exit { ::LOGGER.info 'dying' }
 end
 
 ::LOGGER.info 'starting script execution'
+
+::Censor.override_dangerous_things
 
 code, script_run_id = ::ARGV
 code = <<~RUBY

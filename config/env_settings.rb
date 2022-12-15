@@ -5,6 +5,8 @@ require 'base64'
 
 module Config
   # @return [String]
+  RACK_ENV = ::ENV['RACK_ENV'] || 'development'
+  # @return [String]
   LAMBDEE_HOST = ::ENV['LAMBDEE_HOST'] || 'localhost:3000'
   # @return [String]
   LAMBDEE_PROTOCOL = ::ENV['LAMBDEE_PROTOCOL'] || 'http'

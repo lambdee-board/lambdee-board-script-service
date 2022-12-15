@@ -2,19 +2,25 @@
 
 require 'logger'
 
-# Internal Ruby module used for printing warnings.
-# Ruby warnings like constant reassigning will now raise errors.
-module Warning
-  # @param message [String]
-  # @return [void]
-  def warn(message)
-    raise ::StandardError, message
-  end
-end
-
-::Warning.freeze
-
 module Censor
+  class << self
+    # Override dangerous parts of Ruby
+    def override_dangerous_things
+      ::Object.const_set(:ENV, {}.freeze)
+
+      # Internal Ruby module used for printing warnings.
+      # Ruby warnings like constant reassigning will now raise errors.
+      ::Warning.module_eval do
+        # @param message [String]
+        # @return [void]
+        def warn(message)
+          raise ::StandardError, message
+        end
+      end
+
+      ::Warning.freeze
+    end
+  end
   # Censors modules/classes by overriding all of their methods
   # (both instance and singleton/class methods)
   #
@@ -30,7 +36,7 @@ module Censor
   #     File.read('some_file') #=> :censored_method
   #
   module Refinement
-    # @return [Array<Module, Class>] Modules/Classes that will be censored/blocked
+    # @return [Array<Module, Class, Object>] Modules/Classes/Objects that will be censored/blocked
     CENSORED_MODULES = [
       self,
       ::Thread,
@@ -98,6 +104,10 @@ module Censor
           remove_class_variable
           remove_const
         ]
+      ),
+      CensoredMethods.new(
+        ::ENV,
+        singleton: ENV.methods - %i[object_id __send__]
       )
     ].freeze
 
@@ -127,12 +137,15 @@ module Censor
         this = self
 
         # override instance methods
-        refine censored_methods.mod do
-          import_methods this.censored_methods_module(censored_methods, type: :instance)
+        if censored_methods.mod
+          refine censored_methods.mod do
+            import_methods this.censored_methods_module(censored_methods, type: :instance)
+          end
         end
 
         # override singleton/class methods
-        refine censored_methods.mod.singleton_class do
+        refine censored_methods.singleton_class do
+          p censored_methods.singleton_class if censored_methods.singleton_class == ENV.singleton_class
           import_methods this.censored_methods_module(censored_methods, type: :singleton)
         end
       end
