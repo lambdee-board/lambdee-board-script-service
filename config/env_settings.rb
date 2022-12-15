@@ -19,7 +19,7 @@ module Config
   # with the main Lambdee API Service
   #
   # @return [String]
-  LAMBDEE_API_AUTHORISATION_HEADER = "ScriptService #{::Base64.encode64 SCRIPT_SERVICE_SECRET}"
+  LAMBDEE_API_AUTHORISATION_HEADER = "ScriptService #{::Base64.strict_encode64 SCRIPT_SERVICE_SECRET}"
   # Maximum amount of seconds for executing a script.
   #
   # @return [Integer]
