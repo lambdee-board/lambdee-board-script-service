@@ -36,9 +36,13 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
+    mini_portile2 (2.8.0)
     minitest (5.16.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
+    nokogiri (1.13.9)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     nokogiri (1.13.9-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.13.9-arm64-darwin)
@@ -115,6 +119,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  arm-linux-eabihf
   arm64-darwin-20
   x86_64-linux
 
