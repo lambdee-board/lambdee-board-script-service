@@ -2,6 +2,8 @@
 
 require 'logger'
 
+# Contains methods  and a refinement module
+# which block dangerous parts of the Ruby language
 module Censor
   class << self
     # Override dangerous parts of Ruby

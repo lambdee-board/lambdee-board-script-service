@@ -18,10 +18,14 @@ module DB
         self
       end
 
+      # @param kwargs [Hash{Symbol => Object}]
+      # @return [self]
       def and(**kwargs, &)
         logical_operator(:and, **kwargs, &)
       end
 
+      # @param kwargs [Hash{Symbol => Object}]
+      # @return [self]
       def or(**kwargs, &)
         logical_operator(:or, **kwargs, &)
       end

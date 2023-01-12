@@ -24,6 +24,17 @@ module DB
           @from = from
           @to = to
         end
+
+        # @param key [String, Symbol]
+        def [](key)
+          public_send(key)
+        end
+
+        # @param key [String, Symbol]
+        # @param val [Object]
+        def []=(key, val)
+          public_send(:"#{key}=", val)
+        end
       end
 
       # Class methods for models with persistence.

@@ -183,3 +183,9 @@ Layout/HeredocArgumentClosingParenthesis:
 
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
+
+Style/RedundantConstantBase:
+  Enabled: false
+
+Style/RequireOrder:
+  Enabled: false

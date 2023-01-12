@@ -17,10 +17,12 @@ module DB
         @body = {}
       end
 
+      # @param value [Hash]
       def where_query=(value)
         @body = value
       end
 
+      # @return [Hash]
       def where_query
         @body
       end

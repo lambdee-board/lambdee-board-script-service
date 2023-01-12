@@ -46,7 +46,7 @@ module JSON
 
       value = public_send(key)
       return if value.nil?
-      return value if args.size.zero?
+      return value if args.empty?
       raise ::TypeError, "#{value.class} does not have #dig method" unless value.respond_to?(:dig)
 
       value.dig(*args)

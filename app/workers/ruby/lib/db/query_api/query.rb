@@ -118,10 +118,12 @@ module DB
 
       alias exists? exist?
 
+      # @param value [Hash]
       def where_query=(value)
         @body[:query][:where] = value
       end
 
+      # @return [Hash]
       def where_query
         @body[:query][:where]
       end

@@ -5,10 +5,12 @@ module DB
     # Provides methods which search for
     # records with specified attributes/fields.
     module Searching
+      # @return [Query]
       def all
         Query.new(self)
       end
 
+      # @return [Query]
       def where(...)
         Query.new(self).where(...)
       end
@@ -26,36 +28,48 @@ module DB
 
       alias exists? exist?
 
+      # @return [Query]
       def count
         Query.new(self).count
       end
 
+      # @return [Query]
       def join(*args)
         Query.new(self).join(*args)
       end
 
       alias joins join
 
+      # @return [Query]
+      # @param args [Array<Symbol>]
       def left_outer_join(*args)
         Query.new(self).left_outer_join(*args)
       end
 
+      # @return [Query]
       def distinct
         Query.new(self).distinct
       end
 
+      # @param args [Array<Symbol>]
+      # @return [Query]
       def group_by(*args)
         Query.new(self).group_by(*args)
       end
 
+      # @param kwargs [Hash{Symbol => Symbol}]
+      # @return [Query]
       def order(**kwargs)
         Query.new(self).order(**kwargs)
       end
 
+      # @param elements [Integer]
+      # @return [Query]
       def limit(elements)
         Query.new(self).limit(elements)
       end
 
+      # @param elements [Integer]
       def offset(elements)
         Query.new(self).offset(elements)
       end
