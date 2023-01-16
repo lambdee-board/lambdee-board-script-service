@@ -40,6 +40,7 @@ IRB.conf[:USE_COLORIZE] = true
 IRB.conf[:USE_AUTOCOMPLETE] = false
 IRB.conf[:PROMPT_MODE] = :lambdee
 IRB.conf[:IRB_NAME] = 'lambdee'
+IRB.conf[:COMMAND_ALIASES] = { '$': :show_source, '@': :whereami, break: :irb_break, catch: :irb_catch, next: :irb_next }
 IRB.conf[:PROMPT] = {
   lambdee: {
     PROMPT_I: ::Console::LAMBDEE_PROMPT,
