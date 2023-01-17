@@ -132,6 +132,7 @@ DEPENDENCIES
   faraday
   iodine (~> 0.7)
   minitest
+  nokogiri
   rack-test
   rake
   refrigerator

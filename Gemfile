@@ -9,6 +9,7 @@ gem 'activesupport', '~> 7.0'
 gem 'awesome_print' # better output in the console
 gem 'faraday' # HTTP client
 gem 'iodine', '~> 0.7' # HTTP and WebSocket server
+gem 'nokogiri' # XML/HTML parser and builder
 gem 'refrigerator' # for freezing built-in classes/modules
 gem 'shale' # object mapper and serializer for JSON and other formats
 gem 'sinatra' # HTTP server framework
