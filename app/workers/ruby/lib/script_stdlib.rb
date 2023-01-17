@@ -4,6 +4,7 @@
 require 'stringio'
 require 'json'
 require 'active_support/all'
+require 'active_support/xml_mini'
 
 require_relative 'db'
 require_relative 'script_vars'

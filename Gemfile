@@ -7,6 +7,7 @@ ruby '3.1.3'
 
 gem 'activesupport', '~> 7.0'
 gem 'awesome_print' # better output in the console
+gem 'builder' # XML building for ActiveSupport
 gem 'faraday' # HTTP client
 gem 'iodine', '~> 0.7' # HTTP and WebSocket server
 gem 'nokogiri' # XML/HTML parser and builder

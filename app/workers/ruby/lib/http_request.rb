@@ -2,14 +2,19 @@
 
 require 'set'
 require 'faraday'
+require 'uri'
 
 require_relative 'xml'
 require_relative 'json'
 
 # Send HTTP requests.
 module HTTPRequest
+  class InvalidProtocolError < ::StandardError; end
+
   # @return [Set<Symbol>]
   METHODS = ::Set.new(%i[get head delete trace post put patch]).freeze
+  # @return [Set<String>]
+  ALLOWED_SCHEMES = ::Set.new(%w[http https]).freeze
 
   class << self
     METHODS.each do |http_method|
@@ -26,13 +31,16 @@ module HTTPRequest
     # @param body [String, nil]
     # @param json [Hash, nil]
     # @param xml [Hash, nil]
-    def send(http_method, url, params: nil, headers: nil, body: nil, json: nil, xml: nil) # rubocop:disable Metrics/ParameterLists
+    def send(http_method, url, params: nil, headers: nil, body: nil, json: nil, xml: nil) # rubocop:disable Metrics/ParameterLists, Metrics/PerceivedComplexity
       body ||=
-        if xml
+        if xml && xml != true
           xml
-        elsif json
+        elsif json && json != true
           json
         end
+
+      parsed_uri = ::URI.parse(url)
+      raise InvalidProtocolError, "Expected one of #{ALLOWED_SCHEMES.inspect}, got #{parsed_uri.scheme.inspect}" unless ALLOWED_SCHEMES.include?(parsed_uri.scheme)
 
       conn = ::Faraday.new(url:) do |c|
         if json

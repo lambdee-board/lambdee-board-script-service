@@ -11,6 +11,7 @@ GEM
     backport (1.2.0)
     benchmark (0.2.1)
     brakeman (5.4.0)
+    builder (3.2.4)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
@@ -127,6 +128,7 @@ DEPENDENCIES
   activesupport (~> 7.0)
   awesome_print
   brakeman
+  builder
   bundler-audit
   debug
   faraday
