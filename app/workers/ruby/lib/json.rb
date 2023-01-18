@@ -5,7 +5,9 @@ require 'json'
 # Provide intuitive aliases to JSON methods
 
 module JSON # rubocop:disable Style/Documentation
-  alias decode parse
-  alias encode unparse
-  alias stringify unparse
+  class << self
+    alias decode parse
+    alias encode unparse
+    alias stringify unparse
+  end
 end
