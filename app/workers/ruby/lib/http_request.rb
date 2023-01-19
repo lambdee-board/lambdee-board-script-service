@@ -42,7 +42,7 @@ module HTTPRequest
       parsed_uri = ::URI.parse(url)
       raise InvalidProtocolError, "Expected one of #{ALLOWED_SCHEMES.inspect}, got #{parsed_uri.scheme.inspect}" unless ALLOWED_SCHEMES.include?(parsed_uri.scheme)
 
-      conn = ::Faraday.new(url:) do |c|
+      conn = ::Faraday.new(url:, headers:) do |c|
         if json
           c.request :json
           c.response :json
@@ -54,7 +54,6 @@ module HTTPRequest
       conn.public_send(http_method) do |req|
         req.body = body
         req.params.merge(params) if params
-        req.headers.merge(headers) if headers
       end
     end
 
