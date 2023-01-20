@@ -5,7 +5,36 @@ VERSION=$(cat $BIN_DIR/../.version | tr -d '\n')
 echo "VERSION: $VERSION"
 echo
 
-docker buildx build \
-  --push \
-  --platform linux/amd64,linux/arm64,linux/arm/v7 \
-  -t lambdee/script-service:$VERSION -t lambdee/script-service:latest .
+# docker buildx build \
+#   --push \
+#   --platform linux/amd64,linux/arm64,linux/arm/v7 \
+#   -t lambdee/script-service:$VERSION -t lambdee/script-service:latest .
+
+if [ ! -z "$BUILD" ]; then
+  $BIN_DIR/docker_build
+fi
+
+# push images
+echo "Pushing ARM64"
+docker push lambdee/script-service:$VERSION-arm64
+echo "Pushing AMD64"
+docker push lambdee/script-service:$VERSION-amd64
+echo "Pushing ARMv7"
+docker push lambdee/script-service:$VERSION-armv7
+
+# create a versioned manifest
+docker manifest create lambdee/script-service:$VERSION \
+--amend lambdee/script-service:$VERSION-arm64 \
+--amend lambdee/script-service:$VERSION-amd64 \
+--amend lambdee/script-service:$VERSION-armv7
+
+docker manifest push --purge lambdee/script-service:$VERSION
+
+# create the latest manifest
+docker manifest create lambdee/script-service:latest \
+--amend lambdee/script-service:$VERSION-arm64 \
+--amend lambdee/script-service:$VERSION-amd64 \
+--amend lambdee/script-service:$VERSION-armv7
+
+docker manifest push --purge lambdee/script-service:latest
+
