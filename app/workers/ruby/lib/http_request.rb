@@ -31,7 +31,7 @@ module HTTPRequest
     # @param body [String, nil]
     # @param json [Hash, nil]
     # @param xml [Hash, nil]
-    def send(http_method, url, params: nil, headers: nil, body: nil, json: nil, xml: nil) # rubocop:disable Metrics/ParameterLists, Metrics/PerceivedComplexity
+    def send(http_method, url, params: nil, headers: nil, body: nil, json: nil, xml: nil) # rubocop:disable Metrics/ParameterLists
       body ||=
         if xml && xml != true
           xml
