@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'active_support/all'
 require 'socket'
 require 'logger'
 require 'debug' unless %w[production test].include? ::ENV['RACK_ENV']
@@ -10,7 +9,7 @@ require_relative '../../../utils'
 require_relative '../../../unix_socket'
 
 # from the library for scripts
-require_relative '../lib/db'
+require_relative '../lib/script_stdlib'
 require_relative '../lib/console'
 require_relative '../lib/constant_freezer'
 

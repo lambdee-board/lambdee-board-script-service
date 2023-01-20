@@ -5,6 +5,6 @@ require 'debug'
 require 'irb'
 require 'awesome_print'
 require_relative '../app'
-require_relative '../app/workers/ruby/lib/db'
+require_relative '../app/workers/ruby/lib/script_stdlib'
 
 ::IRB.start

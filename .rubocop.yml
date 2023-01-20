@@ -189,3 +189,6 @@ Style/RedundantConstantBase:
 
 Style/RequireOrder:
   Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false

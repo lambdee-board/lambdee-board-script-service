@@ -11,6 +11,7 @@ GEM
     backport (1.2.0)
     benchmark (0.2.1)
     brakeman (5.4.0)
+    builder (3.2.4)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
@@ -127,11 +128,13 @@ DEPENDENCIES
   activesupport (~> 7.0)
   awesome_print
   brakeman
+  builder
   bundler-audit
   debug
   faraday
   iodine (~> 0.7)
   minitest
+  nokogiri
   rack-test
   rake
   refrigerator
@@ -144,7 +147,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.1.3p185
 
 BUNDLED WITH
    2.3.12

@@ -105,7 +105,7 @@ module WebSocket
       return unauthenticated!(connection) if response.status != 200
 
       json = ::JSON.parse response.body, symbolize_names: true
-      return unauthorised!(connection) unless %w[admin developer].include? json[:role]
+      return unauthorised!(connection) unless %w[admin developer manager].include? json[:role]
 
       connection.write Message.encode(
         type: :info,

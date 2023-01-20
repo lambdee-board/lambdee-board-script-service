@@ -12,6 +12,15 @@ module DB
     include QueryAPI::Deletable
     include QueryAPI::Positionable
 
+    # @return [Hash<]
+    PRIORITIES = ::ActiveSupport::HashWithIndifferentAccess.new({
+      very_low: 0,
+      low: 1,
+      medium: 2,
+      high: 3,
+      very_high: 4
+    })
+
     # @!attribute [rw] author_id
     #   @return [Integer] ID of the associated author.
     # @!attribute [rw] author
@@ -60,5 +69,10 @@ module DB
     # @!attribute [rw] due_time
     #   @return [Time, nil] Due time of this task.
     attribute :start_time, ::Shale::Type::Time
+
+    # @return [Integer, nil]
+    def priority_number
+      PRIORITIES[priority]
+    end
   end
 end

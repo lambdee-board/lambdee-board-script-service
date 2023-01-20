@@ -8,6 +8,11 @@ module Censor
   class << self
     # Override dangerous parts of Ruby
     def override_dangerous_things
+      ::Warning.module_eval do
+        # noop
+        def warn(_arg); end
+      end
+
       ::Object.const_set(:ENV, { 'HOME' => '' }.freeze)
 
       # Internal Ruby module used for printing warnings.

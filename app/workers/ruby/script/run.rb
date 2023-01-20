@@ -9,7 +9,7 @@ require 'debug' unless %w[production test].include? ::ENV['RACK_ENV']
 require_relative '../../../utils'
 
 # from the library for scripts
-require_relative '../lib/db'
+require_relative '../lib/script_stdlib'
 require_relative '../lib/safe_binding'
 require_relative '../lib/constant_freezer'
 
